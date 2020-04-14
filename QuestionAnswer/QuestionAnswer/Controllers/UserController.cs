@@ -1,15 +1,22 @@
-﻿using Dapper;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
+using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using QuestionAnswer.Models;
 
 namespace QuestionAnswer.Controllers
 {
-    public class UserController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
+
         private string connectionString { get; set; }
         private SqlConnection connection;
 
@@ -23,7 +30,7 @@ namespace QuestionAnswer.Controllers
         private SqlConnection GetConnection(string conStr) => new SqlConnection(conStr);
 
         public string GetUsers()
-        { 
+        {
             string query = "SELECT * FROM users";
             return JsonSerializer.Serialize(connection.Query(query).ToList());
         }
@@ -32,5 +39,6 @@ namespace QuestionAnswer.Controllers
         {
             connection.Query($"INSERT INTO User VALUES ('{user.Login}'), ('{user.Password}')");
         }
+
     }
 }

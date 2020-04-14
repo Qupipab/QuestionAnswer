@@ -19,7 +19,5 @@ namespace QuestionAnswer.Models
         public DateTime CreateDate { get; set; }
         public DateTime CloseDate { get; set; }
 
-
-
     }
 }

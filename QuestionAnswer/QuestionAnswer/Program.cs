@@ -2,14 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Dapper;
-using System.IO;
 
 namespace QuestionAnswer
 {
@@ -26,6 +22,5 @@ namespace QuestionAnswer
                 {
                     webBuilder.UseStartup<Startup>();
                 });
-
     }
 }
