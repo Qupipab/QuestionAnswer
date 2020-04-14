@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Data.SqlClient;
@@ -21,14 +22,12 @@ namespace QuestionAnswer.Controllers
 
         private SqlConnection GetConnection(string conStr) => new SqlConnection(conStr);
 
-        [HttpGet]
         public string GetUsers()
         { 
             string query = "SELECT * FROM users";
             return JsonSerializer.Serialize(connection.Query(query).ToList());
         }
 
-        [HttpPost]
         public void NewUser(User user)
         {
             connection.Query($"INSERT INTO User VALUES ('{user.Login}'), ('{user.Password}')");
