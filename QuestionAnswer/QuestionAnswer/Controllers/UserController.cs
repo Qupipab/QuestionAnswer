@@ -29,6 +29,7 @@ namespace QuestionAnswer.Controllers
 
         private SqlConnection GetConnection(string conStr) => new SqlConnection(conStr);
 
+        [HttpGet]
         public string GetUsers()
         {
             string query = "SELECT * FROM users";
