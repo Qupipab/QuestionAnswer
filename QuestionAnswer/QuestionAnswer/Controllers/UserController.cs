@@ -36,9 +36,10 @@ namespace QuestionAnswer.Controllers
             return JsonSerializer.Serialize(connection.Query(query).ToList());
         }
 
+        [HttpPost]
         public void NewUser(User user)
         {
-            connection.Query($"INSERT INTO User VALUES ('{user.Login}'), ('{user.Password}')");
+            connection.Query($"INSERT INTO Users VALUES ('{ user.Login }', '{ user.Password }')");
         }
 
     }
