@@ -30,10 +30,19 @@ namespace QuestionAnswer.Controllers
         private SqlConnection GetConnection(string conStr) => new SqlConnection(conStr);
 
         [HttpGet]
+        [Route("GetUserPolls")]
+        public string GetUserPolls()
+        {
+            string query = "SELECT Title, Link, IsActive, IsPrivate FROM Polls WHERE UserID = 1";
+            return JsonSerializer.Serialize(connection.Query<Poll>(query).ToList());
+        }
+
+        [HttpGet]
+        [Route("GetUsers")]
         public string GetUsers()
         {
             string query = "SELECT * FROM users";
-            return JsonSerializer.Serialize(connection.Query(query).ToList());
+            return JsonSerializer.Serialize(connection.Query<User>(query).ToList());
         }
 
         [HttpPost]

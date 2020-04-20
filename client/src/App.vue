@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Auth></Auth>
+    <router-view/>
   </div>
 </template>
 
@@ -13,16 +13,28 @@ export default {
     Auth
   }
 }
-
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+*
+{
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+
+	box-sizing: border-box;
+	color:#2c3e50;
+	text-decoration: none;
+	list-style: none;
 }
+
+html
+{
+	font-family: 'Roboto', sans-serif;
+	font-size: 10px;
+}
+
+/* input { border: none; }
+input:focus { outline: none; } */
+
 </style>

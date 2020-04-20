@@ -8,9 +8,9 @@ namespace QuestionAnswer.Models
     public class User
     {
 
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-
+        public IList<Poll>? Polls { get; set; }
     }
 }

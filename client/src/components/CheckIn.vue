@@ -1,54 +1,54 @@
 <template>
-  <div id="Auth" class="Auth">
-    <div class="AuthTitle">
-      <h1>Sign in</h1>
+  <div id="CheckIn" class="CheckIn">
+    <div class="CheckInTitle">
+      <h1>Sign up</h1>
     </div>
     <div class = "SendForm">
       <span>Username</span>
       <input v-model="login" maxlength="50"/> 
-      <div class = "PassFrame">
-        <span>Password</span>
-        <router-link to = '/reg'>Forgot password?</router-link>
-      </div>
+      <span>Password</span>
+      <input v-model="password" maxlength="50"/>
+      <span>Confirm password</span>
       <input v-model="password" maxlength="50"/>
     </div>
-    <router-link to = '/main' class = "SendBut"><button v-on:click="addUser">Sign in</button></router-link>
+    <button v-on:click="addUser">Sign up</button>
   </div>
 </template>
 
 <script>
-import httpService from "../httpService.js";
+import httpService from '../httpService.js'
 
 let request = new httpService();
 
 export default {
-  name: "App",
-  data() {
+  name: 'App',
+  data(){
     return {
-      login: "",
-      password: ""
-    };
+      login: '',
+      password: ''
+    }
   },
   methods: {
     addUser() {
       let obj = {
         Login: this.login,
         Password: this.password
-      };
+      }
       request.NewUser(obj);
-      login = "";
-      password = "";
+      login = '';
+      password = '';
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
-.Auth, .SendForm, .PassFrame, .SendBut {
+.CheckIn, .SendForm {
   display: flex;
 }
 
-.PassFrame a{
+a{
   font-weight: normal;
   font-size: 1.3rem;
   color: blue;
@@ -59,7 +59,7 @@ h1{
   text-transform: uppercase;
 }
 
-.PassFrame a:hover{
+a:hover{
   text-decoration: underline;
 }
 
@@ -72,12 +72,7 @@ input{
   margin: .5rem 0;
 }
 
-.PassFrame{
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.Auth {
+.CheckIn {
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
@@ -89,10 +84,10 @@ input{
   align-self: center;
   flex-direction: column;
   width: 40rem;
-  height: 28rem;
+  height: 35rem;
 }
 
-.AuthTitle {
+.CheckInTitle {
   text-align: center;
   margin-top:2rem;
 }
@@ -105,7 +100,7 @@ input{
   font-weight: bold;
 }
 
-.SendBut{
+button{
   text-align: center;
   height: 5rem;
   border-radius: 0 0 2rem 2rem;
@@ -113,9 +108,8 @@ input{
   font-size:1.7rem;
   font-weight: bold;
   color: white;
-  justify-content: center;
 }
 
-.SendBut:hover{background:#28A745;}
+button:hover{background:#28A745;}
 
 </style>
