@@ -1,5 +1,5 @@
 <template>
-  <div class = "Main">
+  <div id = "Main" class = "Main">
     <div class = "MainPolls">
       <div class = "CabinetWrap">
         <h2>Public Polls</h2>
@@ -43,8 +43,6 @@ export default {
   .Main{
     font-size: 2rem;
   }
-
-
 
   .CabinetWrap{
     justify-content: space-between;

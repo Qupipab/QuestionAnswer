@@ -23,8 +23,20 @@ Vue.use(VueRouter)
       path: '/cabinet',
       name: 'Cabinet',
       component: () => import("../components/Cabinet.vue")
+    },
+    {
+      path: '/main/createpoll',
+      name: 'CreatePoll',
+      component: () => import("../components/CreatePoll.vue")
+    },
+    {
+      path: '/cabinet/createpoll',
+      name: 'CreatePoll',
+      component: () => import("../components/CreatePoll.vue")
     }
 
+
+    
     // path: '/',
     // name: 'Home',
     // component: Home

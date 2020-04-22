@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.Language;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using QuestionAnswer.Models;
@@ -34,6 +35,7 @@ namespace QuestionAnswer.Controllers
         private SqlConnection GetConnection(string conStr) => new SqlConnection(conStr);
 
         [HttpGet]
+        [Route("GetPolls")]
         public string GetPolls()
         {
             
@@ -58,9 +60,42 @@ namespace QuestionAnswer.Controllers
 
             var myJson = JsonConvert.SerializeObject(resList, settings);
 
-            
             return myJson;
 
+        }
+
+        [HttpGet]
+        [Route("GetMaxPoll")]
+        public string GetLastPoll() => Connection.QueryFirstOrDefault<string>("SELECT MAX(ID) FROM POLLS");
+
+        [HttpPost]
+        [Route("AddPoll")]
+        public void AddPoll(Poll poll)
+        {
+
+            string q = $"INSERT INTO Polls VALUES" +
+                $"('{ poll.UserID }', '{ poll.Title }', '{ poll.CreateDate }', '{ poll.CloseDate }'," +
+                $"'{ poll.IsPrivate }', '{ poll.IsActive }', '{ poll.VotesCount }', '{ poll.CanAddAnswers }', '{ poll.Link }')";
+
+            Connection.Query(q);
+
+            Console.WriteLine("Poll added");
+        }
+
+        [HttpPost]
+        [Route("AddAnswers")]
+        public void AddPoll(List<Answer> answers)
+        {
+            foreach (var i in answers)
+            {
+                string q = $"INSERT INTO Answers VALUES" +
+                $"('{ i.Title }', '{ i.CreatorID }', '{ i.PollID }')";
+
+                Connection.Query(q);
+                
+            }
+
+            Console.WriteLine("Answers added");
         }
 
     }
