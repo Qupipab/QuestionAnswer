@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -31,8 +33,11 @@ namespace QuestionAnswer.Controllers
 
         [HttpGet]
         [Route("GetUserPolls")]
+        [Authorize]
         public string GetUserPolls()
         {
+            //var a = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            //Console.WriteLine(a);
             string query = "SELECT Title, Link, IsActive, IsPrivate FROM Polls WHERE UserID = 1";
             return JsonSerializer.Serialize(connection.Query<Poll>(query).ToList());
         }

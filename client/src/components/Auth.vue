@@ -12,7 +12,7 @@
       </div>
       <input v-model="password" maxlength="50"/>
     </div>
-    <router-link to = '/main' class = "SendBut"><button v-on:click="addUser">Sign in</button></router-link>
+    <router-link to = '/signin/main' class = "SendBut"><button v-on:click="UserCheck">Sign in</button></router-link>
   </div>
 </template>
 
@@ -25,8 +25,8 @@ export default {
   name: "App",
   data() {
     return {
-      login: "",
-      password: ""
+      login: "User1",
+      password: "Password1"
     };
   },
   methods: {
@@ -38,6 +38,13 @@ export default {
       request.NewUser(obj);
       login = "";
       password = "";
+    },
+    UserCheck() {
+      let obj = {
+        Username: this.login,
+        Password: this.password
+      };
+      request.CheckUser(obj);
     }
   }
 };

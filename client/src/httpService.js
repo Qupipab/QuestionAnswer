@@ -30,6 +30,15 @@ export default class httpService{
       })
     }
 
+    async CheckUser( user ){
+      console.log("1");
+      await fetch(`${ this.Path }Auth/CheckUser`, {
+        body: JSON.stringify( user ),
+        headers: { 'content-type': 'application/json' },
+        method: 'POST'
+      })
+    }
+
     async GetPubPolls(){
       return await fetch(`${ this.Path }Poll/GetPolls`).then(r => r.json());
     }
