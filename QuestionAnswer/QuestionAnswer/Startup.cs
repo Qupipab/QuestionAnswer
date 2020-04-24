@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,7 +32,7 @@ namespace QuestionAnswer
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("https://localhost:8080");
+                                      builder.WithOrigins("http://localhost:8080");
                                       builder.AllowAnyMethod();
                                       builder.AllowAnyHeader();
                                       builder.AllowCredentials();
@@ -57,7 +55,6 @@ namespace QuestionAnswer
             });
         }
 
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             
@@ -66,13 +63,12 @@ namespace QuestionAnswer
                 Secure = CookieSecurePolicy.SameAsRequest,
                 MinimumSameSitePolicy = SameSiteMode.None
             };
+
             app.UseCookiePolicy(cookiePolicyOptions);
 
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthentication();
-
-            app.UseAuthorization();  
 
             if (env.IsDevelopment())
             {
@@ -82,6 +78,8 @@ namespace QuestionAnswer
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

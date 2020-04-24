@@ -36,9 +36,8 @@ namespace QuestionAnswer.Controllers
         [Authorize]
         public string GetUserPolls()
         {
-            //var a = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            //Console.WriteLine(a);
-            string query = "SELECT Title, Link, IsActive, IsPrivate FROM Polls WHERE UserID = 1";
+            var a = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string query = $"SELECT Title, Link, IsActive, IsPrivate FROM Polls WHERE UserID = { a }";
             return JsonSerializer.Serialize(connection.Query<Poll>(query).ToList());
         }
 

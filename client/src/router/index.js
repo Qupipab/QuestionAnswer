@@ -15,12 +15,12 @@ Vue.use(VueRouter)
       component: () => import("../components/CheckIn.vue")
     },
     {
-      path: '/',
+      path: '/signin',
       name: 'SignIn',
       component: () => import("../components/Auth.vue")
     },
     {
-      path: '/signin/main',
+      path: '/main',
       name: 'Main',
       component: () => import("../components/Main.vue")
     },
@@ -30,12 +30,7 @@ Vue.use(VueRouter)
       component: () => import("../components/Cabinet.vue")
     },
     {
-      path: '/main/createpoll',
-      name: 'CreatePoll',
-      component: () => import("../components/CreatePoll.vue")
-    },
-    {
-      path: '/cabinet/createpoll',
+      path: '/createpoll',
       name: 'CreatePoll',
       component: () => import("../components/CreatePoll.vue")
     }

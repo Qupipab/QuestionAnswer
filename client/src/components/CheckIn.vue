@@ -7,9 +7,9 @@
       <span>Username</span>
       <input v-model="login" maxlength="50"/> 
       <span>Password</span>
-      <input v-model="password" maxlength="50"/>
+      <input type ="password" v-model="password" maxlength="50"/>
       <span>Confirm password</span>
-      <input v-model="password" maxlength="50"/>
+      <input type ="password" v-model="conPas" maxlength="50"/>
     </div>
     <button v-on:click="addUser">Sign up</button>
   </div>
@@ -25,15 +25,27 @@ export default {
   data(){
     return {
       login: '',
-      password: ''
+      password: '',
+      conPas: ''
     }
   },
   methods: {
     addUser() {
+      if(this.Login == '' || this.password == '') 
+      {
+        alert("Login or password cant be empty");
+        return;
+      }
+      else if(this.password !== this.conPas) {
+        alert("Password mismatch");
+        return;
+      }
+      
       let obj = {
         Login: this.login,
         Password: this.password
       }
+      alert("User added");
       request.NewUser(obj);
       login = '';
       password = '';

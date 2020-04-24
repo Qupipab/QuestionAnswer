@@ -2,8 +2,11 @@
   <div class="Main">
     <div class="MainPolls">
       <div class="CabinetWrap">
-        <h2>My Polls</h2>
-        <router-link to="/main" class="Cabinet">Main</router-link>
+        <h2>{{ Author }} Polls</h2>
+        <div class="navButtons">
+          <router-link to="/createpoll" class="navBut">New Poll</router-link>
+          <router-link to="/main" class="navBut">Main</router-link>
+        </div>
       </div>
       <div class="UserPolls">
         <span>Draft</span>
@@ -44,11 +47,13 @@ export default {
   name: "App",
   data() {
     return {
-      UserPolls: []
+      UserPolls: [],
+      Author: "Default"
     };
   },
   mounted() {
     request.GetUserPolls().then(r => (this.UserPolls = r));
+    request.GetAuthor().then(r => this.Author = r[0].Login);
   }
 };
 </script>
@@ -70,7 +75,11 @@ export default {
   margin-top: 1rem;
 }
 
-.Cabinet {
+.navButtons{
+  margin-top: .5rem;
+}
+
+.navBut {
   -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
@@ -78,9 +87,10 @@ export default {
   border-radius: 2rem;
   background: #2ebc4f;
   color: #fff;
+  margin: 0rem 1rem;
 }
 
-.Cabinet:hover {
+.navBut:hover {
   background: #28a745;
 }
 

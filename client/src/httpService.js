@@ -31,20 +31,30 @@ export default class httpService{
     }
 
     async CheckUser( user ){
-      console.log("1");
-      await fetch(`${ this.Path }Auth/CheckUser`, {
+      return await fetch(`${ this.Path }Auth/CheckUser`, {
         body: JSON.stringify( user ),
         headers: { 'content-type': 'application/json' },
-        method: 'POST'
-      })
+        method: 'POST',
+        credentials: 'include'
+      }).then(r => r.text());
     }
 
     async GetPubPolls(){
-      return await fetch(`${ this.Path }Poll/GetPolls`).then(r => r.json());
+      return await fetch(`${ this.Path }Poll/GetPolls`, {
+        credentials: 'include'
+      }).then(r => r.json());
     }
 
     async GetUserPolls(){
-      return await fetch(`${ this.Path }User/GetUserPolls`).then(r => r.json());
+      return await fetch(`${ this.Path }User/GetUserPolls`, {
+        credentials: 'include'
+      }).then(r => r.json());
+    }
+
+    async GetAuthor(){
+      return await fetch(`${ this.Path }Poll/GetAuthor`, {
+        credentials: 'include'
+      }).then(r => r.json());
     }
 
     async GetMaxPoll(){

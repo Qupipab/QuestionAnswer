@@ -6,7 +6,7 @@
         <input type="text" v-model="qestTitle">
       </div>
       <div class="Author">
-        <h5>Author: User</h5>
+        <h5>Author: {{ Author }}</h5>
       </div>
       <div class = "Votes">
         <input type = "text" v-model="Votes[0]" maxlength="50"/>
@@ -57,6 +57,8 @@ export default {
   data(){
     return {
       qestTitle: 'Title',
+      UserID: 1,
+      Author: "Default",
       Votes: [],
       anon: false,
       UserAnswer: false,
@@ -68,9 +70,6 @@ export default {
     MaxVotes(val) {
       if(val < 0) this.MaxVotes = 0;
       else if(val > 10) this.MaxVotes = 10;
-    },
-    Votes(){
-
     }
   },
   computed:{
@@ -84,7 +83,7 @@ export default {
         if(this.Votes[i] !== undefined) temp.push(this.Votes[i]);
         
       const poll = {
-        UserID: 1,
+        UserID: parseInt(this.UserID),
         Title: this.qestTitle,
         CreateDate: this.now,
         CloseDate: this.now,
@@ -94,6 +93,8 @@ export default {
         CanAddAnswers: this.UserAnswer,
         Link: 'link'
       }
+
+      request.GetAuthor().then(r => { this.UserID = r[0].ID });
 
       request.GetMaxPoll().then(r =>{
         let arr = [];
@@ -118,7 +119,8 @@ export default {
     }
   },
   mounted(){
-
+    request.GetAuthor().then(r => this.Author = r[0].Login);
+    request.GetAuthor().then(r => this.UserID = r[0].ID);    
   }
 }
 </script>

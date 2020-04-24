@@ -33,21 +33,13 @@ namespace QuestionAnswer.Controllers
 
         private SqlConnection GetConnection(string conStr) => new SqlConnection(conStr);
 
-        //[HttpGet]
-        //public void /* IActionResult */ Login()
-        //{
-            
-        //}
-
         [HttpPost]
         [Route("CheckUser")]
-        public async void LoginAsync(Login login)
+        public async Task<string> LoginAsync(Login login)
         {
-            Console.WriteLine("1");
             string userCheck = LoginUser(login.Username, login.Password);
             if (userCheck != "-1")
             {
-                Console.WriteLine("2");
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, userCheck)
@@ -57,17 +49,20 @@ namespace QuestionAnswer.Controllers
 
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
+                return "0";
             }
-            else Console.WriteLine("fsaasd");
+            else return "-1";
         }
 
 
         private string LoginUser(string username, string password)
         {
-            string a = JsonSerializer.Serialize(Connection.Query($"SELECT ID FROM Users WHERE Login = '{ username }' AND Password = '{ password }'"));
-            return a != "[]" ? a : "-1";
+            return Connection.QueryFirstOrDefault<string>(
+                $"SELECT ID FROM Users WHERE Login = @userName AND Password = @password",
+                new { username, password });
         }
+
+
 
     }
 }

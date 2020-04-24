@@ -8,11 +8,13 @@
       <input v-model="login" maxlength="50"/> 
       <div class = "PassFrame">
         <span>Password</span>
-        <router-link to = '/reg'>Forgot password?</router-link>
       </div>
       <input v-model="password" maxlength="50"/>
     </div>
-    <router-link to = '/signin/main' class = "SendBut"><button v-on:click="UserCheck">Sign in</button></router-link>
+    <div class="navButtons">
+      <button v-on:click="RegUser">Sign up</button>
+      <button v-on:click="UserCheck">Sign in</button>
+    </div>
   </div>
 </template>
 
@@ -44,14 +46,20 @@ export default {
         Username: this.login,
         Password: this.password
       };
-      request.CheckUser(obj);
+      request.CheckUser(obj).then(r => {
+        if(r == "0") this.$router.push('/main')
+        else alert("Incorrect login or password");
+      });
+    },
+    RegUser(){
+      this.$router.push('/reg');
     }
   }
 };
 </script>
 
 <style scoped>
-.Auth, .SendForm, .PassFrame, .SendBut {
+.Auth, .SendForm, .PassFrame, .SendBut, .navButtons{
   display: flex;
 }
 
@@ -112,17 +120,30 @@ input{
   font-weight: bold;
 }
 
-.SendBut{
+.navButtons{
+  justify-content: space-between;
+}
+
+button{
+  width: 50%;
   text-align: center;
   height: 5rem;
-  border-radius: 0 0 2rem 2rem;
   background: #2EBC4F;
   font-size:1.7rem;
   font-weight: bold;
   color: white;
   justify-content: center;
+  cursor: pointer;
 }
 
-.SendBut:hover{background:#28A745;}
+button:first-child{
+  border-radius: 0 0 0 2rem;
+}
+
+button:last-child{
+  border-radius: 0 0 2rem 0rem;
+}
+
+button:hover{background:#28A745;}
 
 </style>
