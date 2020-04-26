@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     addUser() {
-      if(this.Login == '' || this.password == '') 
+      if(this.login == '' || this.password == '') 
       {
         alert("Login or password cant be empty");
         return;
@@ -40,15 +40,15 @@ export default {
         alert("Password mismatch");
         return;
       }
-      
+
       let obj = {
         Login: this.login,
         Password: this.password
       }
-      alert("User added");
-      request.NewUser(obj);
-      login = '';
-      password = '';
+      request.ApplyToServer('User/NewUser', { method: 'POST', body: obj }).then(console.log("User added"));
+      this.login = '';
+      this.password = '';
+      this.conPas = '';
     }
   }
 }

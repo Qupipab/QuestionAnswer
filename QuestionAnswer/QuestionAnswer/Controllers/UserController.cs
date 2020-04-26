@@ -49,10 +49,12 @@ namespace QuestionAnswer.Controllers
             return JsonSerializer.Serialize(connection.Query<User>(query).ToList());
         }
 
+
         [HttpPost]
+        [Route("NewUser")]
         public void NewUser(User user)
         {
-            connection.Query($"INSERT INTO Users VALUES ('{ user.Login }', '{ user.Password }')");
+            connection.Query($"INSERT INTO Users VALUES (@Login, @Password)", new { user.Login, user.Password });
         }
 
     }

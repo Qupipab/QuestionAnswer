@@ -4,11 +4,6 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
   const routes = [
-    // {
-    //   path: '',
-    //   name: 'App',
-    //   component: () => import("@/App.vue")
-    // },
     {
       path: '/reg',
       name: 'Reg',
@@ -33,18 +28,12 @@ Vue.use(VueRouter)
       path: '/createpoll',
       name: 'CreatePoll',
       component: () => import("../components/CreatePoll.vue")
+    },
+    {
+      path: '/poll',
+      name: 'Poll',
+      component: () => import("../components/Poll.vue")
     }
-
-
-    
-    // path: '/',
-    // name: 'Home',
-    // component: Home
-  
-    // path: '/test',
-    // name: 'test',
-    // component: () => import("../components/test.vue")
-  
 ]
 
 const router = new VueRouter({

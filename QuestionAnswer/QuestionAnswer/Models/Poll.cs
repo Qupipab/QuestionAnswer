@@ -7,7 +7,7 @@ namespace QuestionAnswer.Models
 {
     public class Poll
     {
-
+        public string Login { get; set; }
         public int? ID { get; set; }
         public int? UserID { get; set; }
         public byte? VotesCount { get; set; }
@@ -18,6 +18,8 @@ namespace QuestionAnswer.Models
         public bool? CanAddAnswers { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? CloseDate { get; set; }
+
+        public IList<Answer> Answers { get; set; }
 
     }
 }

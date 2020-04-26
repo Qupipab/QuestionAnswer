@@ -94,9 +94,7 @@ export default {
         Link: 'link'
       }
 
-      request.GetAuthor().then(r => { this.UserID = r[0].ID });
-
-      request.GetMaxPoll().then(r =>{
+      request.ApplyToServer('Poll/GetMaxPoll').then(r =>{
         let arr = [];
         for(let i = 0; i < temp.length; i++)
         {
@@ -107,7 +105,7 @@ export default {
           }
           arr.push(ans);
         }
-        request.AddPoll(poll).then(() => request.AddAnswers(arr));})
+        request.ApplyToServer('Poll/AddPoll', { body: poll, method: 'POST' }).then(() => request.ApplyToServer('Poll/AddAnswers', { body:arr, method: 'POST' }));})
       .then(() => {
         this.qestTitle = 'Title';
         this.Votes = [];
@@ -119,8 +117,11 @@ export default {
     }
   },
   mounted(){
-    request.GetAuthor().then(r => this.Author = r[0].Login);
-    request.GetAuthor().then(r => this.UserID = r[0].ID);    
+    request.ApplyToServer('Poll/GetAuthor').then(r => {
+      this.Author = r[0].Login;
+      this.UserID = r[0].ID;
+    });
+
   }
 }
 </script>

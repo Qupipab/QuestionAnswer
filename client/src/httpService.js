@@ -1,63 +1,24 @@
 export default class httpService{
 
-    Path = 'https://localhost:5001/api/';
+  async ApplyToServer(path, params = {}){
+    let { method = 'GET', body, type } = params;
+    let url = 'https://localhost:5001/api/' + path;
+    const headers = { 'content-type': 'application/json' }
 
-    async GetAllUsers(){
-      return await fetch(`${ this.Path }User/GetUsers`).then(r => r.json());
-    }
+    body = body ? JSON.stringify(body) : body;
 
-    async NewUser(data){
-      await fetch(`${ this.Path }User`, {
-        body: JSON.stringify(data),
-        headers: { 'content-type': 'application/json' },
-        method: 'POST'
-      })
-    }
-    
-    async AddPoll( poll ){
-      await fetch(`${ this.Path }Poll/AddPoll`, {
-        body: JSON.stringify( poll ),
-        headers: { 'content-type': 'application/json' },
-        method: 'POST'
-      })
-    }
-
-    async AddAnswers( answers ){
-      await fetch(`${ this.Path }Poll/AddAnswers`, {
-        body: JSON.stringify( answers ),
-        headers: { 'content-type': 'application/json' },
-        method: 'POST'
-      })
-    }
-
-    async CheckUser( user ){
-      return await fetch(`${ this.Path }Auth/CheckUser`, {
-        body: JSON.stringify( user ),
-        headers: { 'content-type': 'application/json' },
-        method: 'POST',
-        credentials: 'include'
-      }).then(r => r.text());
-    }
-
-    async GetPubPolls(){
-      return await fetch(`${ this.Path }Poll/GetPolls`, {
-        credentials: 'include'
-      }).then(r => r.json());
-    }
-
-    async GetUserPolls(){
-      return await fetch(`${ this.Path }User/GetUserPolls`, {
-        credentials: 'include'
-      }).then(r => r.json());
-    }
-
-    async GetAuthor(){
-      return await fetch(`${ this.Path }Poll/GetAuthor`, {
-        credentials: 'include'
-      }).then(r => r.json());
-    }
-
-    async GetMaxPoll(){
-      return await fetch(`${ this.Path }Poll/GetMaxPoll`).then(r => r.json());
-    }
+    return await fetch(url, {
+      method: method,
+      body: body,
+      headers: headers,
+      credentials: 'include'
+    }).then(r => {
+      switch(type){
+        case 'text': return r.text();
+        case 'cons': r.json().then(r => console.log(r));
+          break;
+        default: return r.json().catch(e => {});
+      }
+    });
+  }
 }

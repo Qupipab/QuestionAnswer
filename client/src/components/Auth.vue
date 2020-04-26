@@ -32,21 +32,12 @@ export default {
     };
   },
   methods: {
-    addUser() {
-      let obj = {
-        Login: this.login,
-        Password: this.password
-      };
-      request.NewUser(obj);
-      login = "";
-      password = "";
-    },
     UserCheck() {
       let obj = {
         Username: this.login,
         Password: this.password
       };
-      request.CheckUser(obj).then(r => {
+      request.ApplyToServer('Auth/CheckUser',{ method: 'POST', body: obj, type: 'text' }).then(r => {
         if(r == "0") this.$router.push('/main')
         else alert("Incorrect login or password");
       });

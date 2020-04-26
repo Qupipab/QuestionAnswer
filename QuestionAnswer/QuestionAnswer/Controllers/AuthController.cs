@@ -37,6 +37,7 @@ namespace QuestionAnswer.Controllers
         [Route("CheckUser")]
         public async Task<string> LoginAsync(Login login)
         {
+            Console.WriteLine("1");
             string userCheck = LoginUser(login.Username, login.Password);
             if (userCheck != "-1")
             {

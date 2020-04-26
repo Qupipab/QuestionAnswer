@@ -30,7 +30,7 @@ export default {
     }
   },
   mounted(){
-    request.GetPubPolls().then(r => this.PubPollsList = r);
+    request.ApplyToServer('Poll/GetPolls').then(r => this.PubPollsList = r);
   }
 }
 </script>
