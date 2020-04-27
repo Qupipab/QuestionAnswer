@@ -72,9 +72,6 @@ export default {
       else if(val > 10) this.MaxVotes = 10;
     }
   },
-  computed:{
-
-  },
   methods:{
     AddPoll(){
       let temp = [];
@@ -94,7 +91,7 @@ export default {
         Link: 'link'
       }
 
-      request.ApplyToServer('Poll/GetMaxPoll').then(r =>{
+      request.ApplyToServer('NewPoll/GetLastPoll').then(r =>{
         let arr = [];
         for(let i = 0; i < temp.length; i++)
         {
@@ -105,19 +102,20 @@ export default {
           }
           arr.push(ans);
         }
-        request.ApplyToServer('Poll/AddPoll', { body: poll, method: 'POST' }).then(() => request.ApplyToServer('Poll/AddAnswers', { body:arr, method: 'POST' }));})
-      .then(() => {
-        this.qestTitle = 'Title';
-        this.Votes = [];
-        this.anon = false;
-        this.UserAnswer = false;
-        this.MaxVotes = 1;
-        this.now = myFunc.DateNowYMD();
-      });
+        request.ApplyToServer('NewPoll/AddPoll', { body: poll, method: 'POST' })
+        .then(() => request.ApplyToServer('NewPoll/AddAnswers', { body:arr, method: 'POST' }))})
+        .then(() => {
+          this.qestTitle = 'Title';
+          this.Votes = [];
+          this.anon = false;
+          this.UserAnswer = false;
+          this.MaxVotes = 1;
+          this.now = myFunc.DateNowYMD();
+        });
     }
   },
   mounted(){
-    request.ApplyToServer('Poll/GetAuthor').then(r => {
+    request.ApplyToServer('NewPoll/GetPollAuthor').then(r => {
       this.Author = r[0].Login;
       this.UserID = r[0].ID;
     });

@@ -9,7 +9,7 @@
       <div class = "PassFrame">
         <span>Password</span>
       </div>
-      <input v-model="password" maxlength="50"/>
+      <input type = "password" v-model="password" maxlength="50"/>
     </div>
     <div class="navButtons">
       <button v-on:click="RegUser">Sign up</button>
@@ -27,18 +27,18 @@ export default {
   name: "App",
   data() {
     return {
-      login: "User1",
-      password: "Password1"
+      login: "root",
+      password: "toor"
     };
   },
   methods: {
     UserCheck() {
       let obj = {
-        Username: this.login,
+        Login: this.login,
         Password: this.password
       };
-      request.ApplyToServer('Auth/CheckUser',{ method: 'POST', body: obj, type: 'text' }).then(r => {
-        if(r == "0") this.$router.push('/main')
+      request.ApplyToServer('Auth/SignIn',{ method: 'POST', body: obj, type: 'text' }).then(r => {
+        if(r == "1") this.$router.push('/main')
         else alert("Incorrect login or password");
       });
     },

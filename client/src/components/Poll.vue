@@ -13,7 +13,7 @@
           <div class="VoteTitle">
             <input type = "checkbox" maxlength="50"/><span>{{ item.Title }}</span>
           </div>
-          <span>{{ }}</span>
+          <span></span>
         </div>
       </div>
     </div>
@@ -37,15 +37,6 @@ export default {
       poll: [],
       votesCount: []
     }
-  },
-  watch:{
-    
-  },
-  computed:{
-    
-  },
-  methods:{
-    
   },
   mounted(){
     request.ApplyToServer( 'Poll/GetPoll' ).then(r => this.poll = r[0]);

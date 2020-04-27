@@ -10,6 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using QuestionAnswer.DomainModels;
+using QuestionAnswer.DomainModels.Interfaces;
+using QuestionAnswer.Repositories;
+using QuestionAnswer.Repositories.Interfaces;
 
 namespace QuestionAnswer
 {
@@ -27,6 +31,16 @@ namespace QuestionAnswer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddTransient<IAuthRepository, AuthRepository>();
+            services.AddTransient<IAuthDomainModel, AuthDomainModel>();
+            services.AddTransient<IMainRepository, MainRepository>();
+            services.AddTransient<IMainDomainModel, MainDomainModel>();
+            services.AddTransient<ICabinetRepository, CabinetRepository>();
+            services.AddTransient<ICabinetDomainModel, CabinetDomainModel>();
+            services.AddTransient<INewPollRepository, NewPollRepository>();
+            services.AddTransient<INewPollDomainModel, NewPollDomainModel>();
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -38,7 +52,7 @@ namespace QuestionAnswer
                                       builder.AllowCredentials();
                                   });
             });
-            services.AddControllers();
+
             services.AddAuthentication(sharedOptions => 
             {
                 sharedOptions.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -49,9 +63,6 @@ namespace QuestionAnswer
                 config.Cookie.Name = "AUTHCOOKIE";
                 config.Cookie.SameSite = SameSiteMode.None;
                 config.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-                config.LoginPath = "/SignIn"; ;
-                config.AccessDeniedPath = new PathString("/account/login");
-                config.ExpireTimeSpan = new TimeSpan(365, 0, 0, 0);
             });
         }
 

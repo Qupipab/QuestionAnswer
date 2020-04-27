@@ -52,8 +52,10 @@ export default {
     };
   },
   mounted() {
-    request.ApplyToServer('User/GetUserPolls').then(r => this.UserPolls = r);
-    request.ApplyToServer('Poll/GetAuthor').then(r => this.Author = r[0].Login);
+    request.ApplyToServer('Cabinet/GetUserPolls').then(r => {
+      this.Author = r[0].Login;
+      this.UserPolls = r[0].Polls;
+    });
   }
 };
 </script>

@@ -12,5 +12,6 @@ namespace QuestionAnswer.Models
         public string Login { get; set; }
         public string Password { get; set; }
         public IList<Poll> Polls { get; set; } = null;
+
     }
 }

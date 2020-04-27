@@ -24,9 +24,9 @@ export default {
   name: 'App',
   data(){
     return {
-      login: '',
-      password: '',
-      conPas: ''
+      login: 'Rus12345',
+      password: 'Password',
+      conPas: 'Password'
     }
   },
   methods: {
@@ -45,7 +45,12 @@ export default {
         Login: this.login,
         Password: this.password
       }
-      request.ApplyToServer('User/NewUser', { method: 'POST', body: obj }).then(console.log("User added"));
+      
+      request.ApplyToServer('Auth/NewUser', { method: 'POST', body: obj, type: 'text' }).then(r => {
+        if(r === "1") alert("User added");
+        else if(r === "0") alert("User already exists");
+      });
+
       this.login = '';
       this.password = '';
       this.conPas = '';
