@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace QuestionAnswer.Models
 {
-    public class Login
+    public class Vote
     {
 
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public int PollID { get; set; }
+        public List<UserAnswer> UserVotes { get; set; }
 
     }
 }

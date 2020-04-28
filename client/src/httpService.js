@@ -6,7 +6,7 @@ export default class httpService{
     const headers = { 'content-type': 'application/json' }
 
     body = body ? JSON.stringify(body) : body;
-
+    
     return await fetch(url, {
       method: method,
       body: body,

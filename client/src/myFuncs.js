@@ -10,4 +10,35 @@ export default class myFuncs{
     let newdate = year + "-" + month + "-" + day;
     return newdate;
   }
+
+  DeathLine( date ){
+
+    let now = new Date().getTime();
+
+    var countDownDate = new Date(date).getTime();
+
+    if((countDownDate - now) < 0) 
+    {
+      document.getElementById("DeathLine").innerHTML = "InActive";
+      return;
+    }
+
+    var x = setInterval(function() {
+      let now = new Date().getTime();
+      var distance = countDownDate - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("DeathLine").innerHTML = days + "d " + hours + "h "
+      + minutes + "m " + seconds + "s ";
+
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "EXPIRED";
+      }  
+    }, 200);
+  }
 }

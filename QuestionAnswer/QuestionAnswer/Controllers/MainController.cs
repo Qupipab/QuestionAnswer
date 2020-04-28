@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestionAnswer.DomainModels.Interfaces;
 
@@ -6,6 +7,7 @@ namespace QuestionAnswer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MainController : ControllerBase
     {
         readonly IMainDomainModel MainDomainModel;
@@ -19,7 +21,6 @@ namespace QuestionAnswer.Controllers
         [Route("GetPubPolls")]
         public string GetPolls()
         {
-            Console.WriteLine(MainDomainModel.GetPolls());
             return MainDomainModel.GetPolls();
         }
 

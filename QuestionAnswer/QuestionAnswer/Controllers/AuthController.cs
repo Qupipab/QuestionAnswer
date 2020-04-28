@@ -18,14 +18,16 @@ namespace QuestionAnswer.Controllers
         [HttpPost]
         [Route("SignIn")]
         public async Task<string> SignInAsync(User user) => await AuthDomainModel.SignInAsync(user, HttpContext);
-        
+
+        [HttpGet]
+        [Route("SignOut")]
+        public async Task SignOutAsync() {
+            await AuthDomainModel.SignOutAsync(HttpContext);
+        }
+
         [HttpPost]
         [Route("NewUser")]
-        public string NewUser(User user)
-        {
-            Console.WriteLine(user.Login);
-            return AuthDomainModel.NewUser(user);
-        }
+        public string NewUser(User user) => AuthDomainModel.NewUser(user);
 
     }
 }

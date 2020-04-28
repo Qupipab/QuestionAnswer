@@ -40,6 +40,8 @@ namespace QuestionAnswer
             services.AddTransient<ICabinetDomainModel, CabinetDomainModel>();
             services.AddTransient<INewPollRepository, NewPollRepository>();
             services.AddTransient<INewPollDomainModel, NewPollDomainModel>();
+            services.AddTransient<IPollRepository, PollRepository>();
+            services.AddTransient<IPollDomainModel, PollDomainModel>();
 
             services.AddCors(options =>
             {

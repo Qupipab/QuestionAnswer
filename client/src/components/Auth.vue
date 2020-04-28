@@ -38,7 +38,7 @@ export default {
         Password: this.password
       };
       request.ApplyToServer('Auth/SignIn',{ method: 'POST', body: obj, type: 'text' }).then(r => {
-        if(r == "1") this.$router.push('/main')
+        if(r == "1") this.$router.push('/main');
         else alert("Incorrect login or password");
       });
     },

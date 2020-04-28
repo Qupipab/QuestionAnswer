@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using QuestionAnswer.DomainModels.Interfaces;
@@ -38,6 +39,11 @@ namespace QuestionAnswer.DomainModels
                 await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                 return "1";
             }
+        }
+
+        public async Task SignOutAsync(HttpContext httpContext)
+        {
+            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
         public string NewUser(User user)

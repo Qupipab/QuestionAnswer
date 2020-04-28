@@ -18,7 +18,7 @@ namespace QuestionAnswer.Repositories
         public Dictionary<int, User> GetPolls()
         {
 
-            string query = @"SELECT u.ID, u.Login, p.Title, p.Link FROM Users u INNER JOIN Polls p ON u.ID = p.UserID WHERE p.IsPrivate = 'false'";
+            string query = @"SELECT u.ID, u.Login, p.ID AS PollID, p.Title, p.Link FROM Users u INNER JOIN Polls p ON u.ID = p.UserID WHERE p.IsPrivate = 'false'";
 
             var lookup = new Dictionary<int, User>();
 
@@ -31,7 +31,7 @@ namespace QuestionAnswer.Repositories
                 user.Polls.Add(p);
                 return user;
 
-            }, splitOn: "Title").AsQueryable();
+            }, splitOn: "PollID").AsQueryable();
 
             return lookup;
         }
