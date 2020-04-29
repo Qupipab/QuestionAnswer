@@ -69,5 +69,17 @@ namespace QuestionAnswer.Repositories
             return poll == 0 ? false : true;
         }
 
+        public void AddAnswer(Answer answer)
+        {
+            string query = @"INSERT INTO Answers VALUES ( @Title, @CreatorID, @PollID )";
+            Connection.Query(query, new { answer.Title, answer.CreatorID , answer.PollID });
+        }
+        
+        public string GetLastAnswerID()
+        {
+            string query = @"SELECT TOP 1 ID FROM Answers ORDER BY ID DESC";
+            return Connection.QueryFirstOrDefault<string>(query);
+        }
+
     }
 }

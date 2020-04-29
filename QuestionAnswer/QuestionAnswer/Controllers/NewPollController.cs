@@ -10,6 +10,7 @@ namespace QuestionAnswer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class NewPollController : ControllerBase
     {
 

@@ -20,25 +20,18 @@ namespace QuestionAnswer.Repositories
 
         public List<dynamic> GetPollAuthor(string id) => Connection.Query("SELECT Login, ID FROM Users WHERE ID = @id", new { id }).ToList();
          
-        public void AddPoll(Poll poll)
+        public void AddPoll(Poll p)
         {
-
-            string q = $"INSERT INTO Polls VALUES" +
-                $"('{ poll.UserID }', '{ poll.Title }', '{ poll.CreateDate }', '{ poll.CloseDate }'," +
-                $"'{ poll.IsPrivate }', '{ poll.IsActive }', '{ poll.VotesCount }', '{ poll.CanAddAnswers }', '{ poll.Link }')";
-
-            Connection.Query(q);
-
+            string q = $"INSERT INTO Polls VALUES( @UserID, @Title, @CreateDate, @CloseDate, @IsPrivate, @IsActive, @VotesCount, @CanAddAnswers, @Link )";
+            Connection.Query(q, new { p.UserID, p.Title, p.CreateDate, p.CloseDate, p.IsPrivate, p.IsActive, p.VotesCount, p.CanAddAnswers, p.Link });
         }
 
         public void AddAnswers(List<Answer> answers)
         {
-            foreach (var i in answers)
+            foreach (var a in answers)
             {
-                string q = $"INSERT INTO Answers VALUES" +
-                $"('{ i.Title }', '{ i.CreatorID }', '{ i.PollID }')";
-
-                Connection.Query(q);
+                string q = $"INSERT INTO Answers VALUES ( @Title, @CreatorID, @PollID )";
+                Connection.Query(q, new { a.Title, a.CreatorID, a.PollID });
             }
         }
 

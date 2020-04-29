@@ -1,6 +1,9 @@
 <template>
   <div id="Poll" class = "Poll">
     <div class="UpWrap">
+      <div class="ClosePoll">
+        <img v-if="IsCreator" :title="close" type="image/svg+xml" src='../icons/close.svg'>
+      </div>
       <div class="Title">
         <h5>Title: {{ poll.Title }}</h5>
         <h5>Max Votes: {{ poll.VotesCount }}</h5>
@@ -24,6 +27,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="OwnVote">
+      <input type="text" v-model="ownVote">
+      <div class="OwnVoteBut" @click="AddOwnVote"><span>Add Vote</span></div>
     </div>
     <div class="DownWrap">
       <div class="DeathLineContainer">
@@ -52,14 +59,29 @@ export default {
     return {
       poll: [],
       votes: [],
-      i: 0,
       checkedNames: [],
-      voteArr: []
+      voteArr: [],
+      close: 'Close Poll',
+      IsCreator: false,
+      ownVote: ''
     }
   },
   methods: {
     GetPercent( vote, genVote ){
       if(genVote >= 0) return Math.round( vote / genVote * 100 );
+      else return;
+    },
+    AddOwnVote(){
+      if(!(this.poll.Answers.length >= 10) && this.ownVote != '')
+      {
+        let ans = {
+          "Title": this.ownVote,
+          "PollID":  this.poll.PollID,
+        };
+        request.ApplyToServer('Poll/AddAnswer', { method: 'POST', body: ans, type: 'text' }).then(r => ans.CreatorID = r);
+        this.poll.Answers.push(ans);
+        this.ownVote = '';
+      }
       else return;
     },
     WriteVotes(){
@@ -80,6 +102,8 @@ export default {
         return;
       }
 
+      if(obj.UserVotes.length === 0) return;
+
       request.ApplyToServer('Poll/Vote', { method: 'POST', body: obj, type: 'text' }).then(r => {
         if(r == 1) alert("Voted");
         else alert("You have already voted");
@@ -93,11 +117,17 @@ export default {
       this.voteArr = [];
     }
   },
-  mounted(){
-    request.ApplyToServer('Poll/GetPoll/' + this.id).then(r => 
-    {
-      this.poll = r[0];
-      myFunc.DeathLine(r[0].CloseDate);
+  mounted(){ 
+    request.ApplyToServer('Auth/GetLoggedId', {type: 'text'}).then(r => {
+      if(r !== "0")
+      {
+        request.ApplyToServer('Poll/GetPoll/' + this.id).then(r => 
+        {
+          this.poll = r[0];
+          myFunc.DeathLine(r[0].CloseDate);
+        });
+      }
+      else this.$router.push('/signin');
     });
   }
 }
@@ -108,9 +138,23 @@ export default {
     font-size: 2rem;
   }
 
-  .Title, .Poll, .Author, .Votes, .Vote, .Set, .Anon,
-  .UserAnswer, .MV, .DL, .VoteTitle, .DeathLineContainer{
+  .test{
+    color: red;
+  }
+
+  .Title, .Poll, .Author, .Votes, .Vote, .Set, .Anon, .OwnVote,
+  .UserAnswer, .MV, .DL, .VoteTitle, .DeathLineContainer, .ClosePoll,
+  .OwnVoteBut{
     display: flex;
+  }
+
+  .ClosePoll{
+    justify-content: flex-end;
+  }
+
+  .ClosePoll img{
+    cursor:pointer;
+    margin: 0.5rem 1rem 0 0;
   }
 
   .Title{
@@ -188,6 +232,30 @@ export default {
     margin: .5rem 0;
   }
 
+  .OwnVote{
+    margin: 0.5rem 1rem;
+  }
+
+  .OwnVote input{
+    width: 100%;
+    height: 3rem;
+    padding: 0 1rem;
+  }
+
+  .OwnVote .OwnVoteBut{
+    cursor: pointer;
+    font-size: 2rem;
+    background-color: #2EBC4F;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+  }
+
+  .OwnVote .OwnVoteBut span{
+    color:white;
+    padding: 0 1rem;
+  }
+
   .Set{
     margin-top:1rem;
     justify-content: space-around;
@@ -206,7 +274,7 @@ export default {
     cursor: pointer;
   }
 
-  .Set button:hover{background:#28A745;}
+  .Set button:hover, .OwnVote .OwnVoteBut:hover{background:#28A745;}
 
   .Set .Anon, .Set .UserAnswer, .Set .MV, .Set .DL{
     flex-direction: column;

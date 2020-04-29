@@ -7,6 +7,7 @@ namespace QuestionAnswer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CabinetController : ControllerBase
     {
         readonly ICabinetDomainModel CabinetDomainModel;
@@ -17,7 +18,6 @@ namespace QuestionAnswer.Controllers
 
         [HttpGet]
         [Route("GetUserPolls")]
-        [Authorize]
         public string GetUserPolls()
         {
             return CabinetDomainModel.GetUserPolls(User.FindFirst(ClaimTypes.NameIdentifier).Value);

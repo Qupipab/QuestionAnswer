@@ -35,7 +35,7 @@ namespace QuestionAnswer.DomainModels
 
         public string Vote(Vote vote, string userId)
         {
-            if (!PollRepository.CheckUser(vote.PollID, userId)) 
+            if (!PollRepository.CheckUser(vote.PollID, userId))
             {
                 foreach (var item in vote.UserVotes)
                 {
@@ -43,8 +43,15 @@ namespace QuestionAnswer.DomainModels
                     PollRepository.Vote(item);
                 }
                 return "1";
-            } 
+            }
             else return "-1";
+        }
+
+        public string AddAnswer(Answer answer, string id)
+        {
+            answer.CreatorID = Int32.Parse(id);
+            PollRepository.AddAnswer(answer);
+            return PollRepository.GetLastAnswerID();
         }
 
     }

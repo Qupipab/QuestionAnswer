@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using QuestionAnswer.DomainModels.Interfaces;
@@ -28,6 +29,14 @@ namespace QuestionAnswer.Controllers
         [HttpPost]
         [Route("NewUser")]
         public string NewUser(User user) => AuthDomainModel.NewUser(user);
+
+        [HttpGet]
+        [Route("GetLoggedId")]
+        public string GetLoggedId()
+        {
+            if (User.Identity.IsAuthenticated) return User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            else return "0";
+        }
 
     }
 }

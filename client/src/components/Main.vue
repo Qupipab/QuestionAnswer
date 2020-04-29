@@ -35,7 +35,6 @@ export default {
   },
   methods:{
     showPoll(id){
-      console.log(id);
       this.$router.push({name: 'Poll', params: { id: id }});
     },
     SignOut(){

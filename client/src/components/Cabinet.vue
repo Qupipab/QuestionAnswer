@@ -52,9 +52,15 @@ export default {
     };
   },
   mounted() {
-    request.ApplyToServer('Cabinet/GetUserPolls').then(r => {
-      this.Author = r[0].Login;
-      this.UserPolls = r[0].Polls;
+    request.ApplyToServer('Auth/GetLoggedId', {type: 'text'}).then(r => {
+      if(r !== "0")
+      {
+        request.ApplyToServer('Cabinet/GetUserPolls').then(r => {
+          this.Author = r[0].Login;
+          this.UserPolls = r[0].Polls;
+        });
+      }
+      else this.$router.push('/signin');
     });
   }
 };

@@ -11,6 +11,7 @@ namespace QuestionAnswer.DomainModels.Interfaces
 
         public string GetPoll(int id);
         public string Vote(Vote vote, string userId);
+        public string AddAnswer(Answer answer, string id);
 
     }
 }

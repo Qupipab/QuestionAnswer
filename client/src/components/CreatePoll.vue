@@ -9,16 +9,13 @@
         <h5>Author: {{ Author }}</h5>
       </div>
       <div class = "Votes">
-        <input type = "text" v-model="Votes[0]" maxlength="50"/>
-        <input type = "text" v-model="Votes[1]" maxlength="50"/>
-        <input type = "text" v-model="Votes[2]" maxlength="50"/>
-        <input type = "text" v-model="Votes[3]" maxlength="50"/>
-        <input type = "text" v-model="Votes[4]" maxlength="50"/>
-        <input type = "text" v-model="Votes[5]" maxlength="50"/>
-        <input type = "text" v-model="Votes[6]" maxlength="50"/>
-        <input type = "text" v-model="Votes[7]" maxlength="50"/>
-        <input type = "text" v-model="Votes[8]" maxlength="50"/>
-        <input type = "text" v-model="Votes[9]" maxlength="50"/>
+        <ul>
+          <li v-for = "(vote, index) in Votes" :key ="index">{{ index + 1 }}: {{ Votes[index] }}</li>
+        </ul>
+        <div class="OwnVote">
+          <input type="text" v-model="Vote">
+          <div class="OwnVoteBut" @click="AddVote"><span>Add Vote</span></div>
+        </div>
       </div>
     </div>
     <div class="DownWrap">
@@ -57,13 +54,14 @@ export default {
   data(){
     return {
       qestTitle: 'Title',
-      UserID: 1,
+      UserID: "",
       Author: "Default",
       Votes: [],
       anon: false,
       UserAnswer: false,
       MaxVotes: 1,
-      now: myFunc.DateNowYMD()
+      now: myFunc.DateNowYMD(),
+      Vote: ''
     }
   },
   watch:{
@@ -74,34 +72,32 @@ export default {
   },
   methods:{
     AddPoll(){
-      let temp = [];
-
-      for(let i = 0; i < this.Votes.length; i++)
-        if(this.Votes[i] !== undefined) temp.push(this.Votes[i]);
-        
+      let toSend = this.Votes;
       const poll = {
         UserID: parseInt(this.UserID),
         Title: this.qestTitle,
         CreateDate: this.now,
         CloseDate: this.now,
         IsPrivate: this.anon,
-        IsActive: false,
+        IsActive: true,
         VotesCount: parseInt(this.MaxVotes),
         CanAddAnswers: this.UserAnswer,
         Link: 'link'
       }
 
       request.ApplyToServer('NewPoll/GetLastPoll').then(r =>{
+      
         let arr = [];
-        for(let i = 0; i < temp.length; i++)
+        for(let i = 0; i < toSend.length; i++)
         {
           const ans = {
-            Title: temp[i],
+            Title: toSend[i],
             CreatorID: 1,
             PollID: r + 1
           }
           arr.push(ans);
         }
+        
         request.ApplyToServer('NewPoll/AddPoll', { body: poll, method: 'POST' })
         .then(() => request.ApplyToServer('NewPoll/AddAnswers', { body:arr, method: 'POST' }))})
         .then(() => {
@@ -112,14 +108,26 @@ export default {
           this.MaxVotes = 1;
           this.now = myFunc.DateNowYMD();
         });
-    }
+        this.Votes = [];
+      },
+      AddVote(){
+        if(this.Vote != '' && !(this.Votes.length >= 10)){
+          this.Votes.push(this.Vote);
+          this.Vote = '';
+        }
+      }
   },
   mounted(){
-    request.ApplyToServer('NewPoll/GetPollAuthor').then(r => {
-      this.Author = r[0].Login;
-      this.UserID = r[0].ID;
+    request.ApplyToServer('Auth/GetLoggedId', {type: 'text'}).then(r => {
+      if(r !== "0")
+      {
+        request.ApplyToServer('NewPoll/GetPollAuthor').then(r => {
+          this.Author = r[0].Login;
+          this.UserID = r[0].ID;
+        });
+      }
+      else this.$router.push('/signin');
     });
-
   }
 }
 </script>
@@ -129,7 +137,8 @@ export default {
     font-size: 2rem;
   }
 
-  .Title, .Poll, .Author, .Votes, .Set, .Anon, .UserAnswer, .MV, .DL{
+  .Title, .Poll, .Author, .Votes, .Set, .Anon,
+  .UserAnswer, .MV, .DL, .OwnVote, .OwnVoteBut{
     display: flex;
   }
 
@@ -160,19 +169,38 @@ export default {
   }
 
   .Poll .Votes{
+    padding: 0.25rem 1rem 0.25rem 1rem;
     flex-direction: column;
     width: 100%;
-  }
-
-  .Poll .Votes{
-    padding: 0.25rem 1rem 0.25rem 1rem;
+    font-size: 1.7rem;
   }
 
   .Poll .Votes input[type = text]{
-    height: 4rem;
+    width: 100%;
+    height: 3rem;
     font-size: 2rem;
     padding: 1rem;
-    margin: .5rem 0;
+  }
+
+  .OwnVote{
+    margin-top: 1rem;
+  }
+
+  .OwnVote .OwnVoteBut{
+    cursor: pointer;
+    background-color: #2EBC4F;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .OwnVote .OwnVoteBut:hover{
+    background-color: #28A745;
+  }
+
+  .OwnVote .OwnVoteBut span{
+    padding: 0 1rem;
+    color:white;
   }
 
   .Set{

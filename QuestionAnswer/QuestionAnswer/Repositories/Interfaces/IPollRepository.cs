@@ -11,7 +11,9 @@ namespace QuestionAnswer.Repositories.Interfaces
 
         public Dictionary<int, Poll> GetPoll(int id);
         public void Vote(UserAnswer vote);
-        public bool CheckUser(int pollID, string userId);
+        public void AddAnswer(Answer answer);
+        public bool CheckUser(int pollId, string userId);
+        public string GetLastAnswerID();
 
     }
 }
