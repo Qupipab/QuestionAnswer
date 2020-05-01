@@ -15,6 +15,8 @@ export default class httpService{
     }).then(r => {
       switch(type){
         case 'text': return r.text();
+        case 'bool': return r.text().then(r => (r == 'true'));
+          break;
         case 'cons': r.json().then(r => console.log(r));
           break;
         default: return r.json().catch(e => {});

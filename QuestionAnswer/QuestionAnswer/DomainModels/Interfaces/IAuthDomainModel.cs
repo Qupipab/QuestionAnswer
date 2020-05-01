@@ -6,8 +6,8 @@ namespace QuestionAnswer.DomainModels.Interfaces
 {
     public interface IAuthDomainModel
     {
-        public Task<string> SignInAsync(User user, HttpContext httpContext);
-        public Task SignOutAsync(HttpContext httpContext);
-        public string NewUser(User user);
+        Task<bool> SignInAsync(User user, HttpContext httpContext);
+        Task SignOutAsync(HttpContext httpContext);
+        string NewUser(User user);
     }
 }

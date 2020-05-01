@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
-using QuestionAnswer.DomainModels.Interfaces;
+﻿using QuestionAnswer.DomainModels.Interfaces;
+using QuestionAnswer.Models;
 using QuestionAnswer.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace QuestionAnswer.DomainModels
 {
@@ -9,22 +10,9 @@ namespace QuestionAnswer.DomainModels
 
         readonly ICabinetRepository CabinetRepository;
 
-        public CabinetDomainModel(ICabinetRepository cabinetRepository)
-        {
-            CabinetRepository = cabinetRepository;
-        }
-
-        public string GetUserPolls(string id)
-        {
-            var userPollList = CabinetRepository.GetUserPolls(id).Values;
-
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
-            return JsonConvert.SerializeObject(userPollList, settings);
-        }
+        public CabinetDomainModel(ICabinetRepository cabinetRepository) => CabinetRepository = cabinetRepository;
+        
+        public Dictionary<int, User> GetUserPolls(string id) => CabinetRepository.GetUserPolls(id);
 
     }
 }

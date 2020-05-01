@@ -1,18 +1,18 @@
 <template>
-  <div id="Poll" class = "Poll">
+  <div id="Poll" class = "Poll" v-if="showPage">
     <div class="UpWrap">
       <div class="ClosePoll">
-        <img v-if="IsCreator" :title="close" type="image/svg+xml" src='../icons/close.svg'>
+        <img v-if="isCreator" :title="close" type="image/svg+xml" src='../icons/close.svg'>
       </div>
       <div class="Title">
-        <h5>Title: {{ poll.Title }}</h5>
-        <h5>Max Votes: {{ poll.VotesCount }}</h5>
+        <h5>Title: {{ poll.title }}</h5>
+        <h5>Max Votes: {{ poll.votesCount }}</h5>
       </div>
       <div class="Author">
-        <h5>Author: {{ poll.Author }}</h5>
+        <h5>Author: {{ poll.author }}</h5>
       </div>
       <div class = "Votes">
-        <div class="Vote" v-for = "(item, index) in poll.Answers" :key = "index">
+        <div class="Vote" v-for = "(item, index) in poll.answers" :key = "index">
           <div class="VoteTitle">
             <label class = "VoteCB" >
               <input maxlength="50"
@@ -20,15 +20,16 @@
                 v-model="voteArr[index]"
                 true-value = true
                 false-value = false
+                v-if="isActive"
               >
-              <span>{{ item.Title }}</span>
+              <span>{{ item.title }}</span>
             </label>
-            <div class = "PercentWrap"><div class="Percent" :style = "{ width: 0.8 + GetPercent( item.VoteCount, poll.GeneralVotesCount ) + '%' }"></div></div>
+            <div class = "PercentWrap"><div class="Percent" :style = "{ width: 0.8 + GetPercent( item.voteCount, poll.generalVotesCount ) + '%' }"></div></div>
           </div>
         </div>
       </div>
     </div>
-    <div class="OwnVote">
+    <div class="OwnVote" v-if="canAddAnswers">
       <input type="text" v-model="ownVote">
       <div class="OwnVoteBut" @click="AddOwnVote"><span>Add Vote</span></div>
     </div>
@@ -37,7 +38,7 @@
         <span>PollDeath:</span><div id="DeathLine"></div>
       </div>
       <div class="Set">
-        <button v-on:click = "WriteVotes">Vote</button>
+        <button @click="WriteVotes">Vote</button>
       </div>
     </div>
   </div>
@@ -57,14 +58,19 @@ export default {
   ],
   data(){
     return {
+      showPage: false,
       poll: [],
-      votes: [],
       checkedNames: [],
       voteArr: [],
       close: 'Close Poll',
-      IsCreator: false,
-      ownVote: ''
+      isCreator: false,
+      isActive: false,
+      ownVote: '',
+      canAddAnswers: true
     }
+  },
+  watch:{
+
   },
   methods: {
     GetPercent( vote, genVote ){
@@ -72,62 +78,61 @@ export default {
       else return;
     },
     AddOwnVote(){
-      if(!(this.poll.Answers.length >= 10) && this.ownVote != '')
+      if(!(this.poll.answers.length >= 10) && this.ownVote != '')
       {
         let ans = {
-          "Title": this.ownVote,
-          "PollID":  this.poll.PollID,
+          "title": this.ownVote,
+          "pollID":  this.poll.pollID,
         };
-        request.ApplyToServer('Poll/AddAnswer', { method: 'POST', body: ans, type: 'text' }).then(r => ans.CreatorID = r);
-        this.poll.Answers.push(ans);
+        request.ApplyToServer('Poll/AddAnswer', { method: 'POST', body: ans, type: 'text' }).then(r => ans.creatorID = r);
+        this.poll.answers.push(ans);
         this.ownVote = '';
       }
       else return;
     },
     WriteVotes(){
+
       let obj = {
-        "PollID" : this.poll.PollID,
-        "UserVotes": []
+        "pollID" : this.poll.pollID,
+        "userVotes": []
       }
-      for(let i = 0; i < this.poll.Answers.length; i++){
+      for(let i = 0; i < this.poll.answers.length; i++){
         if((/true/i).test(this.voteArr[i])) {
-          obj.UserVotes.push({"AnswerID": this.poll.Answers[i].AnswerID});
+          obj.userVotes.push({"answerID": this.poll.answers[i].answerID});
         }
       }
 
-      let len = parseInt(this.poll.VotesCount);
+      let len = parseInt(this.poll.votesCount);
 
-      if(obj.UserVotes.length > len){
+      if(obj.userVotes.length > len){
         alert("Too many votes");
         return;
       }
 
-      if(obj.UserVotes.length === 0) return;
+      if(obj.userVotes.length === 0) return;
 
       request.ApplyToServer('Poll/Vote', { method: 'POST', body: obj, type: 'text' }).then(r => {
         if(r == 1) alert("Voted");
         else alert("You have already voted");
       });
 
-      // request.ApplyToServer('Poll/GetPoll/' + this.id).then(r => 
-      // {
-      //   this.poll = r[0];
-      // });
-
       this.voteArr = [];
     }
   },
   mounted(){ 
-    request.ApplyToServer('Auth/GetLoggedId', {type: 'text'}).then(r => {
+    request.ApplyToServer('Auth/GetLoggedId', { type: 'text' }).then(r => {
       if(r !== "0")
       {
+        this.showPage = true;
         request.ApplyToServer('Poll/GetPoll/' + this.id).then(r => 
         {
           this.poll = r[0];
-          myFunc.DeathLine(r[0].CloseDate);
+          this.isActive = r[0].isActive;
+          this.canAddAnswers = r[0].canAddAnswers;
+          //myFunc.DeathLine(r[0].closeDate);
         });
       }
-      else this.$router.push('/signin');
+      else this.$router.push({name: 'SignIn', params: { redir: this.$route.fullPath }});
     });
   }
 }
@@ -261,6 +266,7 @@ export default {
     justify-content: space-around;
     font-size: 1.7rem;
     font-weight: bold;
+    user-select: none;
   }
 
   button{ all: unset; }

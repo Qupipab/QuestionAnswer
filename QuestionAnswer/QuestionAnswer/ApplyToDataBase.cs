@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace QuestionAnswer
 {
-    static public class ApplyToDataBase
+    public static class ApplyToDataBase
     {
 
-        static private string ConnectionString { get; set; }
-        static private SqlConnection Connection { get; set; }
+        private static string ConnectionString { get; set; }
+        private static SqlConnection Connection { get; set; }
 
-        static private SqlConnection ConnectTo(string conStr) => new SqlConnection(conStr);
+        private static SqlConnection ConnectTo(string conStr) => new SqlConnection(conStr);
 
-        static public SqlConnection GetConnection(IConfiguration Configuration)
+        public static SqlConnection GetConnection(IConfiguration Configuration)
         {
             ConnectionString = Configuration.GetConnectionString("PollProject");
             Connection = ConnectTo(ConnectionString);

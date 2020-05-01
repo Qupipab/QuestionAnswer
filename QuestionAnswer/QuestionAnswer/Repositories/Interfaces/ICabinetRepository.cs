@@ -6,7 +6,7 @@ namespace QuestionAnswer.Repositories.Interfaces
     public interface ICabinetRepository
     {
 
-        public Dictionary<int, User> GetUserPolls(string id);
+        Dictionary<int, User> GetUserPolls(string id);
 
     }
 }

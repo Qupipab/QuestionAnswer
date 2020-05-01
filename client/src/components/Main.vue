@@ -4,15 +4,16 @@
       <div class = "CabinetWrap">
         <h2>Public Polls</h2>
         <div class="nav">
-          <router-link to = "/cabinet" class = "Cabinet">Cabinet</router-link>
-          <div class="SignOut" v-on:click = "SignOut">Sign Out</div>
+          <router-link to = "/cabinet" class = "Cabinet" v-if="auth">Cabinet</router-link>
+          <div class="SignOut" v-on:click = "SignOut" v-if="auth">Sign Out</div>
+          <router-link to = "/signin" class = "Cabinet" v-if="!auth">Sign In</router-link>
         </div>
       </div>
-      <div class = "UserPolls" v-for = "(user, ID) in PubPollsList" :key = "ID">
-        <span>{{ user.Login }}</span>
+      <div class = "UserPolls" v-for = "(user, ID) in pubPollsList" :key = "ID">
+        <span>{{ user.login }}</span>
         <div class = "Polls">
-          <div @click="showPoll(poll.PollID)" class = "Poll" v-for = "(poll, p) in user.Polls" :key = "p">
-            {{ poll.Title }}
+          <div @click="showPoll(poll.link)" class = "Poll" v-for = "(poll, p) in user.polls" :key = "p">
+            {{ poll.title }}
           </div>
         </div>
       </div>
@@ -30,19 +31,23 @@ export default {
   props: ['Poll'],
   data(){
     return {
-      PubPollsList: []
+      auth: false,
+      pubPollsList: []
     }
   },
   methods:{
-    showPoll(id){
-      this.$router.push({name: 'Poll', params: { id: id }});
+    showPoll(link){
+      this.$router.push({name: 'Poll', params: { id: link }});
     },
     SignOut(){
       request.ApplyToServer('Auth/SignOut').then(() => this.$router.push('/signin'));
     }
   },
   mounted(){
-    request.ApplyToServer('Main/GetPubPolls').then(r => this.PubPollsList = r);
+    request.ApplyToServer('Auth/GetLoggedId', { type: 'text' }).then(r => { 
+      if(r != "0") this.auth = true;
+    });
+    request.ApplyToServer('Main/GetPubPolls').then(r => this.pubPollsList = r);
   }
 }
 </script>

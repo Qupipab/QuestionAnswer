@@ -6,7 +6,7 @@ namespace QuestionAnswer.Repositories.Interfaces
     public interface IMainRepository
     {
 
-        public Dictionary<int, User> GetPolls();
+        Dictionary<int, User> GetPolls();
 
     }
 }

@@ -1,14 +1,13 @@
-﻿using System;
+﻿using QuestionAnswer.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuestionAnswer.DomainModels.Interfaces
 {
     public interface IMainDomainModel
     {
 
-        public string GetPolls();
+        Dictionary<int, User> GetPolls();
 
     }
 }

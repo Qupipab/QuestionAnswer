@@ -25,6 +25,9 @@ let request = new httpService();
 
 export default {
   name: "App",
+  props:[
+    'redir'
+  ],
   data() {
     return {
       login: "root",
@@ -33,18 +36,24 @@ export default {
   },
   methods: {
     UserCheck() {
+      let defPath = "/main";
+      if(this.redir) defPath = this.redir;
+
       let obj = {
         Login: this.login,
         Password: this.password
       };
-      request.ApplyToServer('Auth/SignIn',{ method: 'POST', body: obj, type: 'text' }).then(r => {
-        if(r == "1") this.$router.push('/main');
+      request.ApplyToServer('Auth/SignIn',{ method: 'POST', body: obj, type: 'bool' }).then(r => {
+        if(r) this.$router.push(defPath);
         else alert("Incorrect login or password");
       });
     },
     RegUser(){
       this.$router.push('/reg');
     }
+  },
+  mounted(){
+    
   }
 };
 </script>

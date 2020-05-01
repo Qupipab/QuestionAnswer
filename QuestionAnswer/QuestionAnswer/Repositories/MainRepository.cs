@@ -11,14 +11,14 @@ namespace QuestionAnswer.Repositories
     public class MainRepository : IMainRepository
     {
 
-        private SqlConnection Connection { get; set; }
+        private readonly SqlConnection Connection;
 
         public MainRepository(IConfiguration configuration) => Connection = ApplyToDataBase.GetConnection(configuration);
 
         public Dictionary<int, User> GetPolls()
         {
 
-            string query = @"SELECT u.ID, u.Login, p.ID AS PollID, p.Title, p.Link FROM Users u INNER JOIN Polls p ON u.ID = p.UserID WHERE p.IsPrivate = 'false'";
+            string query = @"SELECT u.ID, u.Login, p.ID AS PollID, p.Title, p.Link FROM Users u INNER JOIN Polls p ON u.ID = p.UserID WHERE p.IsPrivate = 'false' AND p.IsDraft = 'false'";
 
             var lookup = new Dictionary<int, User>();
 

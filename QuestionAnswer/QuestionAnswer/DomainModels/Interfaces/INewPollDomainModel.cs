@@ -6,10 +6,10 @@ namespace QuestionAnswer.DomainModels.Interfaces
     public interface INewPollDomainModel
     {
 
-        public string GetLastPoll();
-        public void AddPoll(Poll poll);
-        public void AddAnswers(List<Answer> answers);
-        public string GetPollAuthor(string id);
+        int GetLastPoll();
+        void AddPoll(Poll poll);
+        void AddAnswers(List<Answer> answers, int userId);
+        string GetPollAuthor(string id);
 
     }
 }

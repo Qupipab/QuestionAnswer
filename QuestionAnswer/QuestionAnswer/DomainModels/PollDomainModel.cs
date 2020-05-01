@@ -16,25 +16,13 @@ namespace QuestionAnswer.DomainModels
 
         readonly IPollRepository PollRepository;
 
-        public PollDomainModel(IPollRepository pollRepository)
-        {
-            PollRepository = pollRepository;
-        }
+        public PollDomainModel(IPollRepository pollRepository) => PollRepository = pollRepository;
 
-        public string GetPoll(int id)
-        {
-            var pollList = PollRepository.GetPoll(id).Values;
-
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
-            return JsonConvert.SerializeObject(pollList, settings);
-        }
-
+        public Dictionary<int, Poll> GetPoll(string link) => PollRepository.GetPoll(link);
+        
         public string Vote(Vote vote, string userId)
         {
+            Review.NullReview(vote);
             if (!PollRepository.CheckUser(vote.PollID, userId))
             {
                 foreach (var item in vote.UserVotes)
@@ -49,6 +37,7 @@ namespace QuestionAnswer.DomainModels
 
         public string AddAnswer(Answer answer, string id)
         {
+            Review.NullReview(answer);
             answer.CreatorID = Int32.Parse(id);
             PollRepository.AddAnswer(answer);
             return PollRepository.GetLastAnswerID();

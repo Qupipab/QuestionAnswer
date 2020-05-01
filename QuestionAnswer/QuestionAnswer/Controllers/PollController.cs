@@ -13,16 +13,14 @@ namespace QuestionAnswer.Controllers
     [Authorize]
     public class PollController : ControllerBase
     {
+
         readonly IPollDomainModel PollDomainModel;
 
-        public PollController(IPollDomainModel pollDomainModel)
-        {
-            PollDomainModel = pollDomainModel;
-        }
+        public PollController(IPollDomainModel pollDomainModel) => PollDomainModel = pollDomainModel;
 
         [HttpGet]
-        [Route("GetPoll/{id}")]
-        public string GetPoll(int id) => PollDomainModel.GetPoll(id);
+        [Route("GetPoll/{link}")]
+        public Dictionary<int, Poll>.ValueCollection GetPoll(string link) => PollDomainModel.GetPoll(link).Values;
         
         [HttpPost]
         [Route("Vote")]

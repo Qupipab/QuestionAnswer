@@ -12,6 +12,7 @@ Vue.use(VueRouter)
     {
       path: '/signin',
       name: 'SignIn',
+      props: true,
       component: () => import("../components/Auth.vue")
     },
     {
@@ -27,6 +28,7 @@ Vue.use(VueRouter)
     {
       path: '/createpoll',
       name: 'CreatePoll',
+      props: true,
       component: () => import("../components/CreatePoll.vue")
     },
     {

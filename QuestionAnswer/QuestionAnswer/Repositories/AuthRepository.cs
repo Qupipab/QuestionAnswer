@@ -12,7 +12,8 @@ namespace QuestionAnswer.Repositories
     public class AuthRepository : IAuthRepository
     {
 
-        private SqlConnection Connection { get; set; }
+        private readonly SqlConnection Connection;
+
         static IConfiguration Configuration;
         public AuthRepository(IConfiguration configuration)
         {
@@ -22,6 +23,7 @@ namespace QuestionAnswer.Repositories
         
         public int GetUserId(User user)
         {
+            Review.NullReview(user);
             user.Password = CreateHash(user.Password);
             int a = Connection.QueryFirstOrDefault<int>(
                 $"SELECT ID FROM Users WHERE Login = @Login AND Password = @Password",
@@ -31,6 +33,7 @@ namespace QuestionAnswer.Repositories
 
         public bool CheckUser(User user)
         {
+            Review.NullReview(user);
             int id = Connection.QueryFirstOrDefault<int>(
                 $"SELECT ID FROM Users WHERE Login = @Login",
                 new { user.Login });
@@ -39,6 +42,7 @@ namespace QuestionAnswer.Repositories
 
         public void AddUser(User user)
         {
+            Review.NullReview(user);
             user.Password = CreateHash(user.Password);
             Connection.Query($"INSERT INTO Users VALUES (@Login, @Password)", new { user.Login, user.Password });
         }

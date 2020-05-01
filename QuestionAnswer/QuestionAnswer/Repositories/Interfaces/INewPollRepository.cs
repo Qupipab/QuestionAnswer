@@ -6,10 +6,10 @@ namespace QuestionAnswer.Repositories.Interfaces
     public interface INewPollRepository
     {
 
-        public string GetLastPoll();
-        public void AddPoll(Poll poll);
-        public void AddAnswers(List<Answer> answers);
-        public List<dynamic> GetPollAuthor(string id);
+        int GetLastPoll();
+        void AddPoll(Poll poll);
+        void AddAnswers(List<Answer> answers, int userId, int lastPoll);
+        List<dynamic> GetPollAuthor(string id);
 
     }
 }

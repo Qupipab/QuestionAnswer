@@ -16,16 +16,13 @@ namespace QuestionAnswer.DomainModels
 
         private readonly IAuthRepository AuthRepository;
 
-        public AuthDomainModel(IAuthRepository authRepository)
-        {
-            AuthRepository = authRepository;
-        }
-
-        public async Task<string> SignInAsync(User user, HttpContext httpContext)
+        public AuthDomainModel(IAuthRepository authRepository) => AuthRepository = authRepository;
+        
+        public async Task<bool> SignInAsync(User user, HttpContext httpContext)
         {
             int userCheck = AuthRepository.GetUserId(user);
 
-            if (userCheck == 0) return "0";
+            if (userCheck == 0) return false;
             else
             {
                 var claims = new List<Claim>
@@ -37,7 +34,7 @@ namespace QuestionAnswer.DomainModels
 
                 ClaimsPrincipal principal = new ClaimsPrincipal(userIdentity);
                 await httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                return "1";
+                return true;
             }
         }
 

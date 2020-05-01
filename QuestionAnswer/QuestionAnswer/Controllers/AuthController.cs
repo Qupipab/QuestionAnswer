@@ -15,21 +15,19 @@ namespace QuestionAnswer.Controllers
         private readonly IAuthDomainModel AuthDomainModel;
 
         public AuthController(IAuthDomainModel authDomainModel) => AuthDomainModel = authDomainModel;
-        
+
         [HttpPost]
         [Route("SignIn")]
-        public async Task<string> SignInAsync(User user) => await AuthDomainModel.SignInAsync(user, HttpContext);
-
-        [HttpGet]
-        [Route("SignOut")]
-        public async Task SignOutAsync() {
-            await AuthDomainModel.SignOutAsync(HttpContext);
-        }
+        public async Task<bool> SignInAsync(User user) => await AuthDomainModel.SignInAsync(user, HttpContext);
 
         [HttpPost]
         [Route("NewUser")]
         public string NewUser(User user) => AuthDomainModel.NewUser(user);
 
+        [HttpGet]
+        [Route("SignOut")]
+        public async Task SignOutAsync() => await AuthDomainModel.SignOutAsync(HttpContext);
+        
         [HttpGet]
         [Route("GetLoggedId")]
         public string GetLoggedId()

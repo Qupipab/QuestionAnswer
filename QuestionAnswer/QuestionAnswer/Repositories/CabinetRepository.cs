@@ -11,13 +11,14 @@ namespace QuestionAnswer.Repositories
     public class CabinetRepository : ICabinetRepository
     {
 
-        private SqlConnection Connection { get; set; }
+        private readonly SqlConnection Connection;
 
         public CabinetRepository(IConfiguration configuration) => Connection = ApplyToDataBase.GetConnection(configuration);
 
         public Dictionary<int, User> GetUserPolls(string id)
         {
-            string query = $"SELECT Login, Title, Link, IsActive, IsPrivate FROM Polls p INNER JOIN Users u ON u.ID = p.UserID WHERE UserID = { id }";
+            string query = $"SELECT Login, Title, Link, IsActive, IsDraft, IsPrivate, IsClosed " +
+                           $"FROM Polls p INNER JOIN Users u ON u.ID = p.UserID WHERE UserID = @id";
 
             var lookup = new Dictionary<int, User>();
 
@@ -30,7 +31,7 @@ namespace QuestionAnswer.Repositories
                 user.Polls.Add(p);
                 return user;
 
-            }, splitOn: "Title").AsQueryable();
+            }, new { id }, splitOn: "Title").AsQueryable();
 
             return lookup;
         }

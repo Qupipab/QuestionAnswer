@@ -1,17 +1,15 @@
 ﻿using QuestionAnswer.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QuestionAnswer.DomainModels.Interfaces
 {
     public interface IPollDomainModel
     {
 
-        public string GetPoll(int id);
-        public string Vote(Vote vote, string userId);
-        public string AddAnswer(Answer answer, string id);
+        public Dictionary<int, Poll> GetPoll(string link);
+        string Vote(Vote vote, string userId);
+        string AddAnswer(Answer answer, string id);
 
     }
 }

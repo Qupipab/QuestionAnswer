@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,22 +17,38 @@ namespace QuestionAnswer.Controllers
 
         readonly INewPollDomainModel NewPollDomainModel;
 
-        public NewPollController(INewPollDomainModel newPollDomainModel)
-        {
-            NewPollDomainModel = newPollDomainModel;
-        }
-
+        public NewPollController(INewPollDomainModel newPollDomainModel) => NewPollDomainModel = newPollDomainModel;
+        
         [HttpGet]
         [Route("GetLastPoll")]
-        public string GetLastPollId() => NewPollDomainModel.GetLastPoll();
+        public int GetLastPollId() => NewPollDomainModel.GetLastPoll();
 
         [HttpPost]
         [Route("AddPoll")]
-        public void AddPoll(Poll poll) => NewPollDomainModel.AddPoll(poll);
+        public bool AddPoll(Poll poll)
+        {
+            try
+            {
+                Review.NullReview(poll);
+                poll.UserID = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                NewPollDomainModel.AddPoll(poll);
+                NewPollDomainModel.AddAnswers(poll.Answers, poll.UserID);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
 
         [HttpPost]
         [Route("AddAnswers")]
-        public void AddAnswers(List<Answer> answers) => NewPollDomainModel.AddAnswers(answers);
+        public void AddAnswers(List<Answer> answers)
+        {
+            int userId = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            NewPollDomainModel.AddAnswers(answers, userId);
+        }
 
         [HttpGet]
         [Route("GetPollAuthor")]

@@ -1,8 +1,8 @@
 <template>
-  <div class="Main">
+  <div class="Main" v-if="showPage">
     <div class="MainPolls">
       <div class="CabinetWrap">
-        <h2>{{ Author }} Polls</h2>
+        <h2>{{ author }} polls</h2>
         <div class="navButtons">
           <router-link to="/createpoll" class="navBut">New Poll</router-link>
           <router-link to="/main" class="navBut">Main</router-link>
@@ -11,26 +11,32 @@
       <div class="UserPolls">
         <span>Draft</span>
         <div class="Polls">
-          <div v-for="(poll, ID) in UserPolls" :key="ID">
-            <router-link to = "/" class="Poll" v-if="!poll.IsActive && poll.IsPrivate">{{ poll.Title }}</router-link>
+          <div v-for="(poll, ID) in userPolls" :key="ID">
+            <div @click="contDraft(poll.link)" class="Poll" v-if="poll.isDraft">{{ poll.title }}</div>
           </div>
         </div>
         <span>Active</span>
         <div class="Polls">
-          <div v-for="(poll, ID) in UserPolls" :key="ID">
-            <router-link to = "/" class="Poll" v-if="poll.IsActive && !poll.IsPrivate">{{ poll.Title }}</router-link>
+          <div v-for="(poll, ID) in userPolls" :key="ID">
+            <div @click="showPoll(poll.link)" class="Poll" v-if="!poll.isPrivate && poll.isActive && !poll.isDraft && !poll.isClosed">{{ poll.title }}</div>
           </div>
         </div>
         <span>Inactive</span>
         <div class="Polls">
-          <div v-for="(poll, ID) in UserPolls" :key="ID">
-            <router-link to = "/" class="Poll" v-if="!poll.IsActive && !poll.IsPrivate">{{ poll.Title }}</router-link>
+          <div v-for="(poll, ID) in userPolls" :key="ID">
+            <div @click="showPoll(poll.link)" class="Poll" v-if="!poll.isPrivate && !poll.isActive && !poll.isDraft && !poll.isClosed">{{ poll.title }}</div>
+          </div>
+        </div>
+        <span>Private</span>
+        <div class="Polls">
+          <div v-for="(poll, ID) in userPolls" :key="ID">
+            <div @click="showPoll(poll.link)" class="Poll" v-if="poll.isPrivate && !poll.isClosed && !poll.isDraft">{{ poll.title }}</div>
           </div>
         </div>
         <span>Closed</span>
         <div class="Polls">
-          <div v-for="(poll, ID) in UserPolls" :key="ID">
-            <router-link to = "/" class="Poll" v-if="poll.IsActive && poll.IsPrivate">{{ poll.Title }}</router-link>
+          <div v-for="(poll, ID) in userPolls" :key="ID">
+            <div @click="showPoll(poll.link)" class="Poll" v-if="poll.isClosed">{{ poll.title }}</div>
           </div>
         </div>
       </div>
@@ -47,20 +53,30 @@ export default {
   name: "App",
   data() {
     return {
-      UserPolls: [],
-      Author: "Default"
+      showPage: false,
+      userPolls: [],
+      author: "Default"
     };
   },
+  methods:{
+    showPoll(link){
+      this.$router.push({name: 'Poll', params: { id: link }});
+    },
+    contDraft(link){
+      this.$router.push({name: 'CreatePoll', params: { draftPoll: link }});
+    }
+  },
   mounted() {
-    request.ApplyToServer('Auth/GetLoggedId', {type: 'text'}).then(r => {
+    request.ApplyToServer('Auth/GetLoggedId', { type: 'text' }).then(r => {
       if(r !== "0")
       {
+        this.showPage = true;
         request.ApplyToServer('Cabinet/GetUserPolls').then(r => {
-          this.Author = r[0].Login;
-          this.UserPolls = r[0].Polls;
+          this.author = r[0].login;
+          this.userPolls = r[0].polls;
         });
       }
-      else this.$router.push('/signin');
+      else this.$router.push({name: 'SignIn', params: { redir: this.$route.fullPath }});
     });
   }
 };
@@ -122,6 +138,7 @@ export default {
 }
 
 .Poll {
+  cursor: pointer;
   margin: 0.4rem;
   justify-content: center;
   align-items: center;

@@ -9,11 +9,11 @@ namespace QuestionAnswer.Repositories.Interfaces
     public interface IPollRepository
     {
 
-        public Dictionary<int, Poll> GetPoll(int id);
-        public void Vote(UserAnswer vote);
-        public void AddAnswer(Answer answer);
-        public bool CheckUser(int pollId, string userId);
-        public string GetLastAnswerID();
+        Dictionary<int, Poll> GetPoll(string link);
+        void Vote(UserAnswer vote);
+        void AddAnswer(Answer answer);
+        bool CheckUser(int pollId, string userId);
+        string GetLastAnswerID();
 
     }
 }

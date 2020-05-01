@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
-using QuestionAnswer.DomainModels.Interfaces;
+﻿using QuestionAnswer.DomainModels.Interfaces;
+using QuestionAnswer.Models;
 using QuestionAnswer.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace QuestionAnswer.DomainModels
 {
@@ -9,22 +10,10 @@ namespace QuestionAnswer.DomainModels
 
         readonly IMainRepository MainRepository;
 
-        public MainDomainModel(IMainRepository mainRepository)
-        {
-            MainRepository = mainRepository;
-        }
-
-        public string GetPolls()
-        {
-            var pollList = MainRepository.GetPolls().Values;
-
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            };
-
-            return JsonConvert.SerializeObject(pollList, settings);
-        }
+        public MainDomainModel(IMainRepository mainRepository) => MainRepository = mainRepository;
+        
+        public Dictionary<int, User> GetPolls() => MainRepository.GetPolls();
+        
 
     }
 }
