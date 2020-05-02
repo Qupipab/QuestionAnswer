@@ -10,6 +10,8 @@ namespace QuestionAnswer.DomainModels.Interfaces
         void AddPoll(Poll poll);
         void AddAnswers(List<Answer> answers, int userId);
         string GetPollAuthor(string id);
+        void UpdatePoll(Poll poll);
+        void UpdateAnswers(List<Answer> answers, int userid);
 
     }
 }

@@ -47,7 +47,11 @@ export default {
       }
       
       request.ApplyToServer('Auth/NewUser', { method: 'POST', body: obj, type: 'text' }).then(r => {
-        if(r === "1") alert("User added");
+        if(r === "1") 
+        {
+          alert("User added");
+          this.$router.push('/signin');
+        }
         else if(r === "0") alert("User already exists");
       });
 
@@ -96,7 +100,7 @@ input{
   border-radius: 2rem;
 
   margin: 0 auto;
-  margin-top: 30rem;
+  margin-top: 20rem;
   justify-content: space-between;
   align-self: center;
   flex-direction: column;

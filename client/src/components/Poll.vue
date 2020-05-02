@@ -76,9 +76,6 @@ export default {
       canAddAnswers: true
     }
   },
-  watch:{
-
-  },
   methods: {
     GetPercent( vote, genVote ){
       if(genVote >= 0) return Math.round( vote / genVote * 100 );
@@ -153,8 +150,15 @@ export default {
           this.isActive = r[0].isActive;
           this.isAnon = r[0].isAnon;
           this.canAddAnswers = r[0].canAddAnswers;
-          if(new Date(r[0].closeDate) - new Date().getTime() > 0) myFunc.DeathLine(new Date(r[0].closeDate).getTime());
-          else this.isActive = false;
+
+          if(!r[0].isClosed)
+          {
+            if(new Date(r[0].closeDate) - new Date().getTime() > 0 && r[0].isActive) myFunc.DeathLine(new Date(r[0].closeDate).getTime());
+            else this.isActive = false;
+          }
+          else{
+            this.isActive = false;
+          }
         });
       }
       else this.$router.push({name: 'SignIn', params: { redir: this.$route.fullPath }});

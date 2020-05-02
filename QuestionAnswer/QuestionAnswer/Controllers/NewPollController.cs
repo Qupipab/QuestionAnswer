@@ -43,6 +43,25 @@ namespace QuestionAnswer.Controllers
         }
 
         [HttpPost]
+        [Route("UpdatePoll")]
+        public bool UpdatePoll(Poll poll)
+        {
+            try
+            {
+                Review.NullReview(poll);
+                poll.UserID = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                NewPollDomainModel.UpdatePoll(poll);
+                NewPollDomainModel.UpdateAnswers(poll.Answers, poll.UserID);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
+        [HttpPost]
         [Route("AddAnswers")]
         public void AddAnswers(List<Answer> answers)
         {

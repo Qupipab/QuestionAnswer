@@ -20,7 +20,7 @@ namespace QuestionAnswer.Repositories
         {
             string query = @"SELECT 
                             p.ID AS PollID, p.UserID, u.Login AS Author, p.Title, p.IsPrivate,
-                            p.IsActive, p.IsAnon, p.VotesCount AS VotesCount, 
+                            p.IsActive, p.IsAnon, p.VotesCount AS VotesCount, p.IsClosed,
 
                             (SELECT Count(AnswerID)
                             FROM UserAnswer ua
@@ -40,7 +40,7 @@ namespace QuestionAnswer.Repositories
                             INNER JOIN Users u
                             ON u.ID = p.UserID
                             WHERE p.Link = @link
-                            GROUP BY p.ID, p.UserID, u.Login, p.Title, p.IsPrivate, p.IsActive, p.IsAnon, p.VotesCount, p.CanAddAnswers, p.CloseDate, a.ID, ua.AnswerID, a.CreatorID, a.Title";
+                            GROUP BY p.ID, p.UserID, u.Login, p.Title, p.IsPrivate, p.IsClosed, p.IsActive, p.IsAnon, p.VotesCount, p.CanAddAnswers, p.CloseDate, a.ID, ua.AnswerID, a.CreatorID, a.Title";
 
             var lookup = new Dictionary<int, Poll>();
 

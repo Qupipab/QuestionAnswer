@@ -38,5 +38,38 @@ namespace QuestionAnswer.Repositories
             }
         }
 
+        public void UpdatePoll(Poll p)
+        {
+            Review.NullReview(p);
+            string q = $"UPDATE Polls SET" +
+                       $"UserID = @UserID," +
+                       $"Title = @Title, " +
+                       $"VotesCount = @VotesCount, " +
+                       $"CanAddAnswers = @CanAddAnswers," +
+                       $"IsPrivate = @IsPrivate," +
+                       $"IsDraft = @IsDraft," +
+                       $"IsClosed = @IsClosed," +
+                       $"IsActive = @IsActive," +
+                       $"IsAnon = @IsAnon, " +
+                       $"Link = @Link," +
+                       $"CloseDate = @CloseDate" +
+                       $"WHERE ID = @PollID";
+
+            Connection.Query(q, new { p.UserID, p.Title, p.VotesCount, p.CanAddAnswers, p.IsPrivate, p.IsDraft, p.IsClosed, p.IsActive, p.IsAnon, p.Link, p.CloseDate, p.PollID });
+        }
+
+        public void UpdateAnswers(List<Answer> answers, int userId, int lastPoll)
+        {
+            Review.NullReview(answers);
+            foreach (var a in answers)
+            {
+                string q = $"UPDATE Answers SET" +
+                           $"Title = @Title, " +
+                           $"CreatorID = @userId, " +
+                           $"PollID = @lastPoll" +
+                           $"WHERE ID = @id";
+                Connection.Query(q, new { a.Title, userId, lastPoll });
+            }
+        }
     }
 }

@@ -99,7 +99,7 @@ input{
   border-radius: 2rem;
 
   margin: 0 auto;
-  margin-top: 30rem;
+  margin-top: 20rem;
   justify-content: space-between;
   align-self: center;
   flex-direction: column;

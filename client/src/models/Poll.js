@@ -15,7 +15,8 @@ export default class Poll{
       isActive = true,
       isAnon = true,
       link = '',
-      closeDate = ''
+      closeDate = '',
+      draftedAnswers = []
     } = params;
 
     this.votesCount = votesCount;
@@ -26,6 +27,7 @@ export default class Poll{
     this.isAnon = isAnon;
     this.link = link;
     this.closeDate = closeDate;
+    this.draftedAnswers = draftedAnswers;
   }
 
   SendToServer(mode){
@@ -43,10 +45,12 @@ export default class Poll{
       "answers": []
     }
 
-    for(let i = 0; i < this.answers.length; i++) poll.answers.push( { "title": this.answers[i] } );
+    console.log(this.draftedAnswers);
 
-    if(mode = 'INSERT') this.request.ApplyToServer('NewPoll/AddPoll', { body: poll, method: 'POST', type: 'bool' });
-    if(mode = 'UPDATE') ;
+    for(let i = 0; i < this.answers.length; i++) poll.answers.push( { "title": this.answers[i] } );
+    
+    if(mode == 'INSERT') this.request.ApplyToServer('NewPoll/AddPoll', { body: poll, method: 'POST', type: 'bool' });
+    if(mode == 'UPDATE') this.request.ApplyToServer('NewPoll/UpdatePoll', { body: poll, method: 'POST', type: 'bool' });
   }
 
 }

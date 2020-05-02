@@ -26,6 +26,15 @@ namespace QuestionAnswer.DomainModels
         } 
 
         public void AddAnswers(List<Answer> answers, int userid) => NewPollRepository.AddAnswers(answers, userid, GetLastPoll());
-        
+
+        public void UpdatePoll(Poll poll)
+        {
+            Review.NullReview(poll);
+            if (poll.Link == "") poll.Link += GetLastPoll().ToString();
+            NewPollRepository.UpdatePoll(poll);
+        }
+
+        public void UpdateAnswers(List<Answer> answers, int userid) => NewPollRepository.UpdateAnswers(answers, userid, GetLastPoll());
+
     }
 }

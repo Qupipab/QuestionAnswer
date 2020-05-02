@@ -67,6 +67,7 @@ export default {
     return {
       title: 'Title',
       author: "Default",
+      draftedAnswers: [],
       answers: [],
       isPrivate: false,
       isAnon: true,
@@ -111,7 +112,8 @@ export default {
         isActive: !(val),
         isAnon: this.isAnon,
         link: this.link,
-        closeDate: this.closeDate
+        closeDate: this.closeDate,
+        draftedAnswers: this.draftedAnswers
       });
 
       poll.SendToServer(mode);
@@ -146,6 +148,7 @@ export default {
         this.isPrivate = r[0].isPrivate;
         this.isAnon = r[0].isAnon;
         this.canAddAnswers = r[0].canAddAnswers;
+        this.draftedAnswers = r[0].answers;
         for(let i = 0; i < r[0].answers.length; i++){
           this.answers.push(r[0].answers[i].title);
         }
