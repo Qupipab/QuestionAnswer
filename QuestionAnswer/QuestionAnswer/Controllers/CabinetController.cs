@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,10 @@ namespace QuestionAnswer.Controllers
         {
             return CabinetDomainModel.GetUserPolls(User.FindFirst(ClaimTypes.NameIdentifier).Value).Values;
         }
-        
+
+        [HttpGet]
+        [Route("GetUsername")]
+        public string GetUsername() => CabinetDomainModel.GetUsername(Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
+
     }
 }

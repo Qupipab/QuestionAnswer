@@ -27,6 +27,5 @@ namespace QuestionAnswer.DomainModels
 
         public void AddAnswers(List<Answer> answers, int userid) => NewPollRepository.AddAnswers(answers, userid, GetLastPoll());
         
-
     }
 }

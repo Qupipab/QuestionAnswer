@@ -19,8 +19,9 @@ namespace QuestionAnswer.DomainModels
         public PollDomainModel(IPollRepository pollRepository) => PollRepository = pollRepository;
 
         public Dictionary<int, Poll> GetPoll(string link) => PollRepository.GetPoll(link);
-        
-        public string Vote(Vote vote, string userId)
+        public Dictionary<int, AnswerVote> UserVotes(string link) => PollRepository.UserVotes(link);
+
+        public bool Vote(Vote vote, string userId)
         {
             Review.NullReview(vote);
             if (!PollRepository.CheckUser(vote.PollID, userId))
@@ -30,9 +31,9 @@ namespace QuestionAnswer.DomainModels
                     item.UserID = Int32.Parse(userId);
                     PollRepository.Vote(item);
                 }
-                return "1";
+                return true;
             }
-            else return "-1";
+            else return false;
         }
 
         public string AddAnswer(Answer answer, string id)
@@ -42,6 +43,10 @@ namespace QuestionAnswer.DomainModels
             PollRepository.AddAnswer(answer);
             return PollRepository.GetLastAnswerID();
         }
+
+        public void ClosePoll(int id) => PollRepository.ClosePoll(id);
+
+        public void InActivePoll(int id) => PollRepository.InActivePoll(id);
 
     }
 }

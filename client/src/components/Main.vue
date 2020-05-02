@@ -46,8 +46,7 @@ export default {
   mounted(){
     request.ApplyToServer('Auth/GetLoggedId', { type: 'text' }).then(r => { 
       if(r != "0") this.auth = true;
-    });
-    request.ApplyToServer('Main/GetPubPolls').then(r => this.pubPollsList = r);
+    }).then(() => request.ApplyToServer('Main/GetPubPolls').then(r => this.pubPollsList = r));
   }
 }
 </script>

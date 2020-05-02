@@ -36,6 +36,12 @@ Vue.use(VueRouter)
       name: 'Poll',
       props: true,
       component: () => import("../components/Poll.vue")
+    },
+    {
+      path: '/poll/:id/VotedUsers',
+      name: 'VotedUsers',
+      props: true,
+      component: () => import("../components/VotedUsers.vue")
     }
 ]
 

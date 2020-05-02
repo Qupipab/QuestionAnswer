@@ -7,6 +7,7 @@ namespace QuestionAnswer.Repositories.Interfaces
     {
 
         Dictionary<int, User> GetUserPolls(string id);
+        public string GetUsername(int id);
 
     }
 }

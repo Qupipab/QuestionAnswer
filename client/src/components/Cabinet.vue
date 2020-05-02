@@ -71,10 +71,13 @@ export default {
       if(r !== "0")
       {
         this.showPage = true;
-        request.ApplyToServer('Cabinet/GetUserPolls').then(r => {
-          this.author = r[0].login;
-          this.userPolls = r[0].polls;
-        });
+        request.ApplyToServer('Cabinet/GetUsername', { type: 'text' }).then(r => {
+          this.author = r; })
+        .then(()=>{
+          request.ApplyToServer('Cabinet/GetUserPolls').then(r => {
+            if(r[0]) this.userPolls = r[0].polls;
+          });
+        })
       }
       else this.$router.push({name: 'SignIn', params: { redir: this.$route.fullPath }});
     });

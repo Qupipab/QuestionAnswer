@@ -11,20 +11,14 @@ export default class myFuncs{
     return newdate;
   }
 
-  DeathLine( date ){
 
-    let now = new Date().getTime();
+  DeathLine(countDownDate){
+    let display = document.querySelector('#DeathLine');
 
-    var countDownDate = new Date(date).getTime();
+    function timer(){
 
-    if((countDownDate - now) < 0) 
-    {
-      document.getElementById("DeathLine").innerHTML = "InActive";
-      return;
-    }
+      var now = new Date().getTime();
 
-    var x = setInterval(function() {
-      let now = new Date().getTime();
       var distance = countDownDate - now;
 
       var days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -32,14 +26,17 @@ export default class myFuncs{
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      document.getElementById("DeathLine").innerHTML = days + "d " + hours + "h "
-      + minutes + "m " + seconds + "s ";
+      display.textContent = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
 
       if (distance < 0) {
         clearInterval(x);
-        document.getElementById("demo").innerHTML = "EXPIRED";
-      }  
-    }, 200);
+        display.textContent = "EXPIRED";
+      }
+      
+    }
+
+    timer();
+    setInterval(timer, 1000);
   }
 
   MakeLinkHash(length) {

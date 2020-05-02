@@ -69,7 +69,7 @@ export default {
       author: "Default",
       answers: [],
       isPrivate: false,
-      isAnon: false,
+      isAnon: true,
       canAddAnswers: false,
       votesCount: 0,
       closeDate: '',
@@ -142,7 +142,6 @@ export default {
     if(this.draftPoll){
       request.ApplyToServer('Poll/GetPoll/' + this.draftPoll).then(r => 
       {
-        console.log(r);
         this.title = r[0].title;
         this.isPrivate = r[0].isPrivate;
         this.isAnon = r[0].isAnon;

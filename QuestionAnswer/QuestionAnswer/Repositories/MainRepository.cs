@@ -18,7 +18,10 @@ namespace QuestionAnswer.Repositories
         public Dictionary<int, User> GetPolls()
         {
 
-            string query = @"SELECT u.ID, u.Login, p.ID AS PollID, p.Title, p.Link FROM Users u INNER JOIN Polls p ON u.ID = p.UserID WHERE p.IsPrivate = 'false' AND p.IsDraft = 'false'";
+            string query = @"SELECT u.ID, u.Login, p.ID AS PollID, p.Title, p.Link 
+                             FROM Users u 
+                             INNER JOIN Polls p ON u.ID = p.UserID 
+                             WHERE p.IsPrivate = 'false' AND p.IsDraft = 'false' AND p.IsClosed = 'false'";
 
             var lookup = new Dictionary<int, User>();
 

@@ -8,6 +8,7 @@ namespace QuestionAnswer.DomainModels.Interfaces
     {
 
         Dictionary<int, User> GetUserPolls(string id);
+        public string GetUsername(int id);
 
     }
 }

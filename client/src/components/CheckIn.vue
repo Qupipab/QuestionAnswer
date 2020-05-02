@@ -24,7 +24,7 @@ export default {
   name: 'App',
   data(){
     return {
-      login: 'Rus12345',
+      login: 'User',
       password: 'Password',
       conPas: 'Password'
     }

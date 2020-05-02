@@ -21,14 +21,26 @@ namespace QuestionAnswer.Controllers
         [HttpGet]
         [Route("GetPoll/{link}")]
         public Dictionary<int, Poll>.ValueCollection GetPoll(string link) => PollDomainModel.GetPoll(link).Values;
+
+        [HttpGet]
+        [Route("UserVotes/{link}")]
+        public Dictionary<int, AnswerVote>.ValueCollection UserVotes(string link) => PollDomainModel.UserVotes(link).Values;
         
         [HttpPost]
         [Route("Vote")]
-        public string Vote(Vote vote) => PollDomainModel.Vote(vote, User.FindFirst(ClaimTypes.NameIdentifier).Value);
+        public bool Vote(Vote vote) => PollDomainModel.Vote(vote, User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
         [HttpPost]
         [Route("AddAnswer")]
         public string AddAnswer(Answer answer) => PollDomainModel.AddAnswer(answer, User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        [HttpPost]
+        [Route("ClosePoll/{id}")]
+        public void ClosePoll(int id) => PollDomainModel.ClosePoll(id);
+
+        [HttpPost]
+        [Route("InActive/{id}")]
+        public void InActivePoll(int id) => PollDomainModel.InActivePoll(id);
 
     }
 }

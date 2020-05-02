@@ -13,6 +13,7 @@ namespace QuestionAnswer.DomainModels
         public CabinetDomainModel(ICabinetRepository cabinetRepository) => CabinetRepository = cabinetRepository;
         
         public Dictionary<int, User> GetUserPolls(string id) => CabinetRepository.GetUserPolls(id);
+        public string GetUsername(int id) => CabinetRepository.GetUsername(id);
 
     }
 }

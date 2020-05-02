@@ -36,5 +36,7 @@ namespace QuestionAnswer.Repositories
             return lookup;
         }
 
+        public string GetUsername(int id) => Connection.QueryFirstOrDefault<string>($"SELECT Login FROM Users WHERE ID = @id", new { id });    
+        
     }
 }

@@ -5,3 +5,6 @@ dotnet_diagnostic.CA2007.severity = none
 
 # CA2227: Свойства коллекций должны быть доступны только для чтения
 dotnet_diagnostic.CA2227.severity = none
+
+# CA1031: Не перехватывать исключения общих типов
+dotnet_diagnostic.CA1031.severity = none

@@ -19,8 +19,8 @@ namespace QuestionAnswer.Repositories
         public Dictionary<int, Poll> GetPoll(string link)
         {
             string query = @"SELECT 
-                            p.ID AS PollID, u.Login AS Author, p.Title, p.IsPrivate,
-                            p.IsActive, p.IsAnon, p.VotesCount AS VotesCount,
+                            p.ID AS PollID, p.UserID, u.Login AS Author, p.Title, p.IsPrivate,
+                            p.IsActive, p.IsAnon, p.VotesCount AS VotesCount, 
 
                             (SELECT Count(AnswerID)
                             FROM UserAnswer ua
@@ -40,7 +40,7 @@ namespace QuestionAnswer.Repositories
                             INNER JOIN Users u
                             ON u.ID = p.UserID
                             WHERE p.Link = @link
-                            GROUP BY p.ID, u.Login, p.Title, p.IsPrivate, p.IsActive, p.IsAnon, p.VotesCount, p.CanAddAnswers, p.CloseDate, a.ID, ua.AnswerID, a.CreatorID, a.Title";
+                            GROUP BY p.ID, p.UserID, u.Login, p.Title, p.IsPrivate, p.IsActive, p.IsAnon, p.VotesCount, p.CanAddAnswers, p.CloseDate, a.ID, ua.AnswerID, a.CreatorID, a.Title";
 
             var lookup = new Dictionary<int, Poll>();
 
@@ -55,6 +55,31 @@ namespace QuestionAnswer.Repositories
 
             }, new { link }, splitOn: "AnswerID").AsQueryable();
             
+            return lookup;
+        }
+
+        public Dictionary<int, AnswerVote> UserVotes(string link)
+        {
+            string query = @"SELECT a.ID, a.Title, u.Login 
+                             From Answers a 
+                             INNER JOIN Polls p ON a.PollID = p.ID 
+                             INNER JOIN UserAnswer ua ON ua.AnswerID = a.ID 
+                             INNER JOIN Users u ON u.ID = ua.UserID 
+                             WHERE p.Link = @link";
+
+            var lookup = new Dictionary<int, AnswerVote>();
+
+            var a = Connection.Query<AnswerVote, User, AnswerVote>(query, (a, u) =>
+            {
+
+                AnswerVote answerVote;
+                if (!lookup.TryGetValue(a.Id, out answerVote)) lookup.Add(a.Id, answerVote = a);
+                if (answerVote.Users == null) answerVote.Users = new List<User>();
+                answerVote.Users.Add(u);
+                return answerVote;
+
+            }, new { link }, splitOn: "Login").AsQueryable();
+
             return lookup;
         }
 
@@ -84,6 +109,9 @@ namespace QuestionAnswer.Repositories
             string query = @"SELECT TOP 1 ID FROM Answers ORDER BY ID DESC";
             return Connection.QueryFirstOrDefault<string>(query);
         }
+
+        public void ClosePoll(int id)  => Connection.Query($"UPDATE Polls SET IsClosed = '1' WHERE Polls.ID = @id", new { id });
+        public void InActivePoll(int id) => Connection.Query($"UPDATE Polls SET IsActive = '0' WHERE Polls.ID = @id", new { id });
 
     }
 }

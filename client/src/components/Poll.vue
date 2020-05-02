@@ -2,13 +2,14 @@
   <div id="Poll" class = "Poll" v-if="showPage">
     <div class="UpWrap">
       <div class="ClosePoll">
-        <img v-if="isCreator" :title="close" type="image/svg+xml" src='../icons/close.svg'>
+        <img v-if="isCreator" :title="close" @click="ClosePoll" type="image/svg+xml" src='../icons/close.svg'>
       </div>
       <div class="Title">
         <h5>Title: {{ poll.title }}</h5>
         <h5>Max Votes: {{ poll.votesCount }}</h5>
       </div>
       <div class="Author">
+        <h5><a v-if="!isAnon" @click="VotedUsers">Voted Users</a></h5>
         <h5>Author: {{ poll.author }}</h5>
       </div>
       <div class = "Votes">
@@ -35,7 +36,10 @@
     </div>
     <div class="DownWrap">
       <div class="DeathLineContainer">
-        <span>PollDeath:</span><div id="DeathLine"></div>
+        <div class="PollTimer">
+          <span>PollDeath:</span><div id="DeathLine">InActive</div>
+        </div>
+        <div class="InActive" @click="InActive" v-if="isCreator">Set InActive</div>
       </div>
       <div class="Set">
         <button @click="WriteVotes">Vote</button>
@@ -59,12 +63,15 @@ export default {
   data(){
     return {
       showPage: false,
+      pollID: 0,
       poll: [],
+      creatorID: '',
       checkedNames: [],
       voteArr: [],
       close: 'Close Poll',
       isCreator: false,
       isActive: false,
+      isAnon: true,
       ownVote: '',
       canAddAnswers: true
     }
@@ -111,25 +118,43 @@ export default {
 
       if(obj.userVotes.length === 0) return;
 
-      request.ApplyToServer('Poll/Vote', { method: 'POST', body: obj, type: 'text' }).then(r => {
-        if(r == 1) alert("Voted");
+      request.ApplyToServer('Poll/Vote', { method: 'POST', body: obj, type: 'bool' }).then(r => {
+        if(r) alert("Voted");
         else alert("You have already voted");
       });
 
       this.voteArr = [];
+    },
+    VotedUsers(){
+      this.$router.push({name: 'VotedUsers', params: { id: this.id }});
+    },
+    ClosePoll(){
+      request.ApplyToServer('Poll/ClosePoll/' + this.pollID, { method: 'POST' }).then(() => { 
+        this.$router.push('/main');
+      });
+    },
+    InActive(){
+      request.ApplyToServer('Poll/InActive/' + this.pollID, { method: 'POST' }).then(() => { 
+        this.isActive = false;
+      });
     }
   },
   mounted(){ 
     request.ApplyToServer('Auth/GetLoggedId', { type: 'text' }).then(r => {
       if(r !== "0")
       {
+        this.creatorID = r;
         this.showPage = true;
         request.ApplyToServer('Poll/GetPoll/' + this.id).then(r => 
         {
+          this.pollID = r[0].pollID;
+          this.isCreator = this.creatorID == r[0].userID;
           this.poll = r[0];
           this.isActive = r[0].isActive;
+          this.isAnon = r[0].isAnon;
           this.canAddAnswers = r[0].canAddAnswers;
-          //myFunc.DeathLine(r[0].closeDate);
+          if(new Date(r[0].closeDate) - new Date().getTime() > 0) myFunc.DeathLine(new Date(r[0].closeDate).getTime());
+          else this.isActive = false;
         });
       }
       else this.$router.push({name: 'SignIn', params: { redir: this.$route.fullPath }});
@@ -149,7 +174,7 @@ export default {
 
   .Title, .Poll, .Author, .Votes, .Vote, .Set, .Anon, .OwnVote,
   .UserAnswer, .MV, .DL, .VoteTitle, .DeathLineContainer, .ClosePoll,
-  .OwnVoteBut{
+  .OwnVoteBut, .PollTimer{
     display: flex;
   }
 
@@ -184,8 +209,16 @@ export default {
   }
 
   .Poll .Author{
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: .5rem 1rem;
+  }
+
+  .Poll .Author a{
+    cursor: pointer;
+  }
+
+  .Poll .Author a:hover{
+    text-decoration: underline;
   }
 
   .Poll .Votes{
@@ -293,7 +326,17 @@ export default {
   }
 
   .DeathLineContainer{
+    justify-content: space-between;
     margin-left: 1rem;
+  }
+
+  .InActive{
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+
+  .InActive:hover{
+    text-decoration: underline;
   }
 
   #DeathLine{
