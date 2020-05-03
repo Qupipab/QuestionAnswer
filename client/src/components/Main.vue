@@ -12,9 +12,9 @@
       <div class = "UserPolls" v-for = "(user, ID) in pubPollsList" :key = "ID">
         <span>{{ user.login }}</span>
         <div class = "Polls">
-          <div @click="showPoll(poll.link)" class = "Poll" v-bind:class="test(poll.isActive)" v-for = "(poll, p) in user.polls" :key = "p">
+          <a class = "Poll" v-bind:class="GetColor(poll.isActive)" v-bind:href="GetUrl(poll.link)" v-for = "(poll, p) in user.polls" :key = "p">
             {{ poll.title }}
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -36,12 +36,12 @@ export default {
     }
   },
   methods:{
-    test(val){
-      if(val) return "Red";
-      else return "Green";
+    GetUrl(val){
+      return this.$route.fullPath + "/Poll/" + val;
     },
-    showPoll(link){
-      this.$router.push({name: 'Poll', params: { id: link }});
+    GetColor(val){
+      if(val) return "Green";
+      else return "Red";
     },
     SignOut(){
       request.ApplyToServer('Auth/SignOut').then(() => this.$router.push('/signin'));

@@ -32,7 +32,7 @@ Vue.use(VueRouter)
       component: () => import("../components/CreatePoll.vue")
     },
     {
-      path: '/poll/:id',
+      path: '/main/poll/:id',
       name: 'Poll',
       props: true,
       component: () => import("../components/Poll.vue")
