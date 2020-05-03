@@ -12,7 +12,7 @@
       <div class = "UserPolls" v-for = "(user, ID) in pubPollsList" :key = "ID">
         <span>{{ user.login }}</span>
         <div class = "Polls">
-          <div @click="showPoll(poll.link)" class = "Poll" v-for = "(poll, p) in user.polls" :key = "p">
+          <div @click="showPoll(poll.link)" class = "Poll" v-bind:class="test(poll.isActive)" v-for = "(poll, p) in user.polls" :key = "p">
             {{ poll.title }}
           </div>
         </div>
@@ -36,6 +36,10 @@ export default {
     }
   },
   methods:{
+    test(val){
+      if(val) return "Red";
+      else return "Green";
+    },
     showPoll(link){
       this.$router.push({name: 'Poll', params: { id: link }});
     },
@@ -54,6 +58,14 @@ export default {
 <style scoped>
   .CabinetWrap, .MainPolls, .Poll, .Polls, .nav, .SignOut{
     display: flex;
+  }
+
+  .Red{
+    background-color: #EC7063;
+  }
+
+  .Green{
+    background-color: #28B463;
   }
 
   .Main{
