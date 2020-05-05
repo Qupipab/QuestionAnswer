@@ -18,25 +18,25 @@
         <span>Active</span>
         <div class="Polls">
           <div v-for="(poll, ID) in userPolls" :key="ID">
-            <div @click="showPoll(poll.link)" class="Poll" v-if="!poll.isPrivate && poll.isActive && !poll.isDraft && !poll.isClosed">{{ poll.title }}</div>
+            <a v-bind:href="showPoll(poll.link)" class="Poll" v-if="!poll.isPrivate && poll.isActive && !poll.isDraft && !poll.isClosed">{{ poll.title }}</a>
           </div>
         </div>
         <span>Inactive</span>
         <div class="Polls">
           <div v-for="(poll, ID) in userPolls" :key="ID">
-            <div @click="showPoll(poll.link)" class="Poll" v-if="!poll.isPrivate && !poll.isActive && !poll.isDraft && !poll.isClosed">{{ poll.title }}</div>
+            <a v-bind:href="showPoll(poll.link)" class="Poll" v-if="!poll.isPrivate && !poll.isActive && !poll.isDraft && !poll.isClosed">{{ poll.title }}</a>
           </div>
         </div>
         <span>Private</span>
         <div class="Polls">
           <div v-for="(poll, ID) in userPolls" :key="ID">
-            <div @click="showPoll(poll.link)" class="Poll" v-if="poll.isPrivate && !poll.isClosed && !poll.isDraft">{{ poll.title }}</div>
+            <a v-bind:href="showPoll(poll.link)" class="Poll" v-if="poll.isPrivate && !poll.isClosed && !poll.isDraft">{{ poll.title }}</a>
           </div>
         </div>
         <span>Closed</span>
         <div class="Polls">
           <div v-for="(poll, ID) in userPolls" :key="ID">
-            <div @click="showPoll(poll.link)" class="Poll" v-if="poll.isClosed">{{ poll.title }}</div>
+            <a v-bind:href="showPoll(poll.link)" class="Poll" v-if="poll.isClosed">{{ poll.title }}</a>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@ export default {
   },
   methods:{
     showPoll(link){
-      this.$router.push({name: 'Poll', params: { id: link }});
+      return `http://localhost:8080/main/poll/${link}`;
     },
     contDraft(link){
       this.$router.push({name: 'CreatePoll', params: { draftPoll: link }});

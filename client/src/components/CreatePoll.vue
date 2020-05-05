@@ -39,7 +39,7 @@
         </div>
         <div class="DL">
           <span>Death Line</span>
-          <input type="date" v-model="closeDate"/>
+          <input type="date" value="2018-01-01" v-model="closeDate"/>
         </div>
         <div class="ConfButtons">
           <button class="DraftBut" @click="DraftPoll">Draft</button>
@@ -75,7 +75,15 @@ export default {
       votesCount: 0,
       closeDate: '',
       vote: 'Answer1',
-      link: ''
+      link: '',
+      isDraft: false
+    }
+  },
+  filters: {
+    test(val, isDraft){
+      console.log(isDraft);
+      if(isDraft) return myFunc.ConvertDate(val);
+      else return myFunc.DateNowYMD();
     }
   },
   watch:{
@@ -89,6 +97,9 @@ export default {
     }
   },
   methods:{
+    SetDate(){
+
+    },
     CreatePoll(){
       if(this.draftPoll) this.SendPoll(false, 'UPDATE');
       else this.SendPoll(false, 'INSERT');
@@ -98,6 +109,7 @@ export default {
       else this.SendPoll(true, 'INSERT');
     },
     SendPoll(val, mode){
+      console.log(this.closeDate);
       if(this.closeDate == '' || this.answers.length < 2 || this.votesCount <= 0)
       {
         alert('Something wrong!');
@@ -144,6 +156,7 @@ export default {
     if(this.draftPoll){
       request.ApplyToServer('Poll/GetPoll/' + this.draftPoll).then(r => 
       {
+        this.isDraft = true;
         this.title = r[0].title;
         this.isPrivate = r[0].isPrivate;
         this.isAnon = r[0].isAnon;
@@ -153,7 +166,7 @@ export default {
           this.answers.push(r[0].answers[i].title);
         }
         this.votesCount = r[0].votesCount;
-        this.closeDate = myFunc.ConvertDate(r[0].closeDate);
+        this.closeDate = r[0].closeDate;
       });
     }
   }

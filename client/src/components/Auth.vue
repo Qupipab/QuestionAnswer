@@ -51,9 +51,6 @@ export default {
     RegUser(){
       this.$router.push('/reg');
     }
-  },
-  mounted(){
-    
   }
 };
 </script>
